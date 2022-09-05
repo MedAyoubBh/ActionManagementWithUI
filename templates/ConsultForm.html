@@ -1,0 +1,99 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8 general" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+
+  <link href={% static "css/navbar.css" %} rel="stylesheet">
+  <link href={% static "css/ConsultForm.css" %} rel="stylesheet">
+  <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+  <title>Consult PA</title>
+</head>
+
+<body>
+  {%include "navbar.html"%}
+  <h1 class="sousTitre">Consutler Plan d'Actions</h1>
+  {%if error%}
+  <div class="error">
+    <h1 style="color: red">{{error}}</h1>
+  </div>
+
+  {%endif%} {%if pagePA%}
+
+  <div class="Consult">
+    <form class="Cform" action="Consult" method="POST" enctype="multipart/form-data" style="display: grid">
+      {% csrf_token%}
+      <select class="disabledNumber" name="sects" id="sects" hidden>
+        <option class="optionCss" value="{{sect}}" selected>{{sect}}</option>
+      </select>
+      <input type="number" name="nbPA" id="nbPA" value="{{lastNbPA}}" hidden />
+      <select class="disabledNumber" name="nbPA" id="nbPA" hidden>
+        <option class="optionCss" value="{{nb}}" selected>{{nb}}</option>
+      </select>
+      <label for="sects">Le secteur du plan d'action</label>
+      <select class="disabledNumber" name="sects" id="sects" disabled>
+        <option class="optionCss" value="{{sect}}" selected>{{sect}}</option>
+      </select>
+      <label for="nbPA">Le numéro du plan d'action : </label>
+      <select class="disabledNumber" name="nbPA" id="nbPA" disabled>
+        <option class="optionCss" value="{{nb}}" selected>{{nb}}</option>
+      </select>
+      <label for="pagePA">Sélectionner la page du plan d'action : </label>
+      <select class="disabledNumber" name="pagePA" id="pagePA" spellcheck="true">
+        {%for page in pagePA %}
+        <option class="optionCss" value="{{page}}">{{page}}</option>
+        {%endfor%}
+      </select>
+      <label for="respFilter">Filtrer les actions par :</label>
+      <select class="disabledNumber" name="respFilter" id="respFilter" spellcheck="true">
+        <option class="optionCss" value="tous" selected>toutes</option>
+        <option class="optionCss" value="miennes">miennes</option>
+      </select>
+      <input class="btn" type="submit" value="Confirm" />
+    </form>
+  </div>
+  {%elif NbPA %}
+  <div class="Consult">
+    <form class="Cform" action="Consult" method="POST" enctype="multipart/form-data" style="display: grid">
+      {% csrf_token%}
+      <select class="disabledNumber" name="sects" id="sects" hidden>
+        <option class="optionCss" value="{{sect}}" selected>{{sect}}</option>
+      </select>
+      <input type="number" name="nbPA" id="nbPA" value="{{lastNbPA}}" hidden />
+      <label for="sects">Le secteur du plan d'action</label>
+      <select class="disabledNumber" name="sects" id="sects" disabled>
+        <option value="{{sect}}" selected>{{sect}}</option>
+      </select>
+      <label for="nbPA">Sélectionner le numéro du plan d'action : </label>
+      <select class="disabledNumber" name="nbPA" id="nbPA" spellcheck="true" required>
+        {%for nb in NbPA%}
+        <option value="{{nb}}">{{nb}}</option>
+        {%endfor%}
+      </select>
+
+      <input class=btn type="submit" value="Confirm">
+    </form>
+  </div>
+  {%else%}
+  <div class="Consult">
+    <form class="Cform" action="Consult" method="post" style="display: grid">
+      {% csrf_token%}
+      <label for="secteurs">Sélectionner le secteur du plan d'action</label>
+      <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
+        {%for sect in sects%}
+        <option value="{{sect.nameSec.0}}">{{sect.nameSec.0}}</option>
+        {%endfor%}
+      </select>
+      <input class="btn" type="submit" value="Confirm" />
+    </form>
+  </div>
+  {%endif%}
+</body>
+
+</html>

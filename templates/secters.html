@@ -1,0 +1,66 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href={% static "css/sectors.css" %} rel="stylesheet" >
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>Secteurs</title>
+      
+  </head>
+
+  <body>
+    
+    {%include 'navbar.html'%}
+    {%include 'messages.html'%}
+    <h1 class="sousTitre">Tableau des Secteurs</h1>
+    <div class="SecterTable">
+        <table class="SecterTab">
+            <tr>
+                <th class="theader"><b>Secteurs</b></th>
+                <th class="vide">Modifier</th>
+                <th class="vide">Supprimer</th>
+            </tr>
+            <tr></tr>
+            {%if sects %}
+                {%for sect in sects%}
+                    <tr>
+                        <td id="nameSec" class="box">{{sect.0}}</td>
+                        <td id="modifier" class="ltheader">
+                            <form action="ModificateSecter" class="ModificateSecter" name="ModificateSecter{{sect.0}}" method="post">
+                                {%csrf_token%}
+                                <input type="text" name="nameSec" id="nameSec" value="{{sect.0}}" hidden>
+                                <button type="submit">
+                                    <img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png"/>
+                                </button>
+                            </form>
+                        </td>
+                        <td id="delete" class="ltheader">
+                            <form action="DeleteSecter" class="DeleteSecter" name="DeleteSecter{{sect.0}}" method="post">
+                                {%csrf_token%}
+                                <input type="text" name="nameSec" id="nameSec" value="{{sect.0}}" hidden>
+                                <button type="submit">
+                                    <img src="https://img.icons8.com/glyph-neue/64/000000/delete-forever.png"/>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {%endfor%}
+            {%endif%}
+        </table>
+    </div>
+    <div class="form">
+        <form action="CreateSecter" method="post">
+            {%csrf_token%}
+            <input class="btn" type="submit" value="Ajouter nouveau Secteur">
+        </form>
+    </div>
+  </body>
+</html>

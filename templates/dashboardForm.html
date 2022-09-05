@@ -1,0 +1,59 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href={% static "css/PA.css" %} rel="stylesheet" >
+    <link href={% static "css/PA2.css" %} rel="stylesheet" > -->
+    <link href={% static "css/dashboardForm.css" %} rel="stylesheet" >
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>Ajouter Action</title>
+      
+  </head>
+
+  <body>
+      {%include 'messages.html'%}
+      {%include 'navbar.html'%}
+      <h1 class="sousTitre">Tableau de Bord</h1>
+      <div class="Dashboard">
+        <form action="Dashboard" name="Dashboard" method="POST" enctype="multipart/form-data" style="display:grid ;">
+            {% csrf_token %}
+                <label for="nbAct">Filtrer PA par : </label>
+                <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
+                    <option value="tous" selected>Tous</option>
+                    {%for sect in sects%}
+                        <option value="{{sect.nameSec.0}}">{{sect.nameSec.0}}</option>
+                    {%endfor%}
+                </select>
+                <div class="filterByTime">
+                    <label for="">Filtrer par temps : </label>
+                    <br>
+                    <input class="check top" type="checkbox" name="periode" value="periode" id="periode" onclick="show()">  Période
+                </div>
+                <div class="timeInterval" id="timeInterval" hidden>
+                    <label for="datePrevue">Date de début : </label>
+                    <input type="date" name="dateDebut" id="dateDebut"><br>
+                    <label for="datePrevue">Date de fin : </label>
+                    <input type="date" name="dateFin" id="dateFin">
+                </div>
+                <label for="">Filtrer par responsable(s) : </label>
+                <div class="allResp">
+                    <input class="check" type="checkbox" name="tousResp" value="tousResp" id="tousResp" checked onclick="selectAll()">Tous
+                </div>
+                <div class="resp" id="resp" hidden>
+                    {%for resp in resps%}
+                        <input type="checkbox" name="resp{{resp.Immatricule}}" value="{{resp.Immatricule}}" id="resp{{resp.Immatricule}}">{{resp.Immatricule}}
+                    {%endfor%}
+                </div>
+                <input class="btn" type="submit" value="Filtrer" id="Filtrer">
+        </form>
+      </div>
+      <script src="{% static "js/Dform.js" %}"></script>
+  </body>
+</html>

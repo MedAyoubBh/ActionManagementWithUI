@@ -1,0 +1,78 @@
+body {
+    background-color: #eef8fc;
+  }
+label {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    font-weight: bold;
+    margin-left: 5%;
+    color: #253d5b;
+  }
+  .sousTitre{
+    margin-top: 2%;
+   
+    font-family: Arial, Helvetica, sans-serif;
+   
+    font-weight: bold;
+    margin-left: 5%;
+    color: #253d5b;
+  }
+  .createUser{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 2rem;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-bottom: 1.2rem;
+    margin-top: 3%;
+    margin-bottom: 2%;
+    margin-right: 30%;
+    margin-left: 30%;
+    border: solid #729777;
+    border-radius: 1.875rem;
+    width: 30%;
+}
+  .btn{
+    text-indent: 1%;
+    width: 30%;
+    margin-top: 5%;
+    margin-bottom: 3%;
+    margin-left: 35%;
+  
+    border-radius: 1.875rem;
+    border-color: transparent;
+    background-color: #45cca4;
+    font-weight: bold;
+    text-align: center;
+  
+    box-sizing: border-box;
+  
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 2%;
+    padding-right: 2%;
+  
+    border-style: outset;
+    border-color: transparent;
+  }
+  .disabledNumber{
+    font-size: 1.1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #355882;
+    cursor: pointer;
+    text-indent: center;
+    text-align: center;
+    box-sizing: border-box;
+    margin-left: 20%;
+    margin-bottom: 5%;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 1.875rem;
+    padding-left: 1.5rem;
+    /* padding-right: 3rem; */
+    height: 2rem;
+    width: 60%;
+  }

@@ -1,0 +1,25 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href={% static "css/PA.css" %} rel="stylesheet" >
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>created</title>
+      
+  </head>
+
+  <body onload="setTimeout(function() { document.myform.submit() }, 0)">
+    <form action="Consult" name="myform" method="post">
+        {% csrf_token%}
+        <input type="number" name="idPA" id="idPA"hidden value="{{idPA}}">
+        <button type="submit" hidden>Submit</button>
+    </form>
+  </body>
+</html>

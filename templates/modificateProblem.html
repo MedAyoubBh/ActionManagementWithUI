@@ -1,0 +1,39 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href={% static "css/modificateProblem.css" %} rel="stylesheet" >
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>modifier problème</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+    <div class="modificateProblem">
+      <form action="ModificateProblem" name="ModificateProblem" method="post" style="display:grid ;">
+        {% csrf_token%}
+        <input type="number" name="idPA1" id="idPA1" hidden value="{{idPA}}">
+        <input type="number" name="idProb" id="idProb" hidden value="{{prob.idProb}}">
+        <label for="indicateur">Modifier la description du problèmes :</label>
+        <textarea name="probDesc" id="probDesc" cols="50" rows="10">{{prob.descriptionProb}}</textarea>
+        <label for="cr">Modifier la criticité du problème : </label>
+                <select class="disabledNumber" name="cr" id="cr">
+                    {%for i in crList%}
+                        <option value="{{i}}" {% if prob.cr == i %} selected {%endif%} >{{i}}</option>
+                    {%endfor%}
+                </select>
+        <h6 class="criticite">(*)CR : criticité (1:critique  2:modéré  3:non critique)</h6>
+        <button class="btn" type="submit">Modifier</button>
+    </form>
+    </div>
+    
+  </body>
+</html>

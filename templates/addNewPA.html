@@ -1,0 +1,82 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link href={% static "css/addNewPA.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>Créer Plan d'action</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+    <h1 class="sousTitre">Ajouter un Plan d'Action</h1>
+    {%if lastNbPA %}
+      <div class="createPa">
+        <form action="PAE" method="POST" enctype="multipart/form-data" style="display:grid ;">
+            {% csrf_token%}
+                <select class="disabledNumber" name="sects" id="sects" hidden>
+                  <option value="{{sect}}" selected>{{sect}}</option>
+                </select>
+                <input type="number" name="nbPA" id="nbPA" value="{{lastNbPA}}" hidden>
+                <label for="sects">Le secteur du plan d'action</label>
+                <select class="disabledNumber" name="sects" id="sects" disabled>
+                        <option value="{{sect}}" selected>{{sect}}</option>
+                </select>
+                <label for="nbPA">N°: </label>
+                <input class="disabledNumber" type="number" name="nbPA" id="nbPA" value="{{lastNbPA}}" disabled>
+                <div>
+                  <br><br>
+                    <label for="">Sélectionner les participants dans ce PA : </label>
+                    {%for part in parts%}
+                    <div class="theNumber">
+                    {{part.Immatricule}}
+                        <input type="checkbox" name="part{{part.Immatricule}}" value="{{part.Immatricule}}" id="part{{part.Immatricule}}">
+                      </div>
+                    {%endfor%}
+                    <br><br>
+                    <label for="">Sélectionner le(s) checker(s) de ce PA : </label>
+                    {%for part in parts%}
+                    <div class="theNumber">
+                      {{part.Immatricule}}
+                        <input type="checkbox" name="C{{part.Immatricule}}" value="{{part.Immatricule}}" id="C{{part.Immatricule}}">
+                    </div>
+                        {%endfor%}
+                    <br><br>
+                    <label for="">Sélectionner le(s) actor(s) de ce PA : </label>
+                    {%for part in parts%}
+                    <div class="theNumber">
+                    {{part.Immatricule}}
+                        <input type="checkbox" name="A{{part.Immatricule}}" value="{{part.Immatricule}}" id="A{{part.Immatricule}}">
+                      </div>
+                        {%endfor%}
+                </div>
+                <input class="btn" type="submit" value="Create">
+        </form>
+      </div>
+    {%else%}
+      <div class="createPa">
+          <form action="CreatePA" method="post" style="display:grid ;">
+              {% csrf_token%}
+                  <label for="secteurs">Sélectionner le secteur du plan d'action</label>
+                  <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
+                      {%for sect in sects%}
+                          <option value="{{sect.nameSec.0}}">{{sect.nameSec.0}}</option>
+                      {%endfor%}
+                  </select>
+                  <input class="btn" type="submit" value="Confirm">
+          </form>
+      </div>
+    
+    {%endif%}
+  </div>
+  </body>
+</html>

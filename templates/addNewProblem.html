@@ -1,0 +1,42 @@
+{%load static%}
+<!doctype html> 
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link href={% static "css/addNewProblem.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>Ajouter Problème</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+      <div class="CreateProblem">
+        <form action="CreateProblem" method="POST" enctype="multipart/form-data" style="display:grid ;">
+            {% csrf_token %}
+                <input type="number" name="idPA" id="idPA" value="{{idPA}}" hidden>
+                <input type="number" name="idAxe" id="idAxe" value="{{idAxe}}" hidden>
+                <input type="number" name="nbProb" id="nbProb" value="{{nbProb}}" hidden>
+                <label for="nbProbs">Problème N°: </label>
+                <input class="disabledNumber" type="number" name="nbProbs" id="nbProbs" value="{{nbProb}}" disabled>
+                <label for="descriptionProb">Donner le description du problème : </label>
+                <textarea name="descriptionProb" id="descriptionProb" cols="60" rows="10" required></textarea>
+                <label for="cr">Sélectionner le criticité du problème : </label>
+                <select class="disabledNumber" name="cr" id="cr" required>
+                    {%for i in crList%}
+                        <option value="{{i}}">{{i}}</option>
+                    {%endfor%}
+                </select>
+                <h6 class="criticite">(*)CR : criticité (1:critique  2:modéré  3:non critique)</h6S>
+                  <br></br>
+                <input class="btn" type="submit" value="Create">
+        </form>
+      </div>
+  </body>
+</html>

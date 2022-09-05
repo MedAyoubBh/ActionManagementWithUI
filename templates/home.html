@@ -1,0 +1,45 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8 general">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta
+        name="description"
+        content="Quali-tous is a web app to plan , do , check and act for the process actions in industry" />
+        <link rel="shortcut icon" href="../static/images/favicon.ico">
+        <!-- Bootstrap CSS -->
+       
+        <link href={% static "css/navbar.css" %} rel="stylesheet" >
+        <link href={% static "css/home.css" %} rel="stylesheet" >
+
+        <title>Quali-Tous</title>
+        
+    </head>
+
+    <body>
+        
+        {%include 'navbar.html'%}
+        {%include 'messages.html'%}
+        {%if request.session.user %}
+        <div class="welcome"><h1>Bienvenue {{request.session.user.Name}}  à la page d'accueil !</h1></div>
+        
+        {%else%}
+        <aside class="topright" style="display:inline-block; width: 49%; height:100%;"> <img class="image" src="../static/images/pdca.png" alt="pdca animation"></aside>
+        <div class="bodyDescription">
+            <h1 id="titleDescription">Quali-Tous</h1>
+            <p class="description">
+                Quali-tous est une application web <br></br> dédié pour consulter les
+        processus ,<br></br>
+        les actions au sein des industries.<br></br>
+        Faire des plan d'actions en quelques étapes ...
+       
+            </p>
+            <a id="btn" href="Login">Login</a>
+            </div>
+           
+        
+        {%endif%}
+    </body>
+    </html>

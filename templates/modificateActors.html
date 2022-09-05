@@ -1,0 +1,36 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link href={% static "css/modificateActors.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>modifier Actors</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+    <div class="Container">
+      <form action="ModificateActors" name="ModificateActors" method="post" style="display:grid ;">
+        {% csrf_token%}
+        <input type="number" name="idPA1" id="idPA1" hidden value="{{pa.idPA}}">
+        <label for="">Sélectionner les Actors :</label>
+        {%for user in users%}
+        <div class="theNumber">
+          {{user}}
+            <input type="checkbox" name="A{{user}}" value="{{user}}" id="A{{user}}" {% if user in pa.A %} checked {%endif%} >
+          </div>
+            {%endfor%}
+        <button type="submit">Modifier</button>
+    </form>
+    </div>
+    
+  </body>
+</html>

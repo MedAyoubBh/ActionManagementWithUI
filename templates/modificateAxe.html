@@ -1,0 +1,32 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    
+    <link href={% static "css/modificateAxe.css" %} rel="stylesheet" >
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>modifier axe</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+    <div class="modificateAxe">
+    <form action="ModificateAxe" name="ModificateAxe" method="post" style="display:grid ;">
+        {% csrf_token%}
+        <input type="number" name="idPA1" id="idPA1" hidden value="{{idPA}}">
+        <input type="number" name="idAxe" id="idAxe" hidden value="{{axe.idAxe}}">
+        <label for="indicateur">Modifier l'indicateur du problèmes :</label>
+        <textarea name="indicateur" id="indicateur" cols="50" rows="10">{{axe.indicateur}}</textarea>
+        <button class="btn" type="submit">Modifier</button>
+    </form>
+  </div>
+  </body>
+</html>

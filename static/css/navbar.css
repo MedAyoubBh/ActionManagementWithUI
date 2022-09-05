@@ -1,0 +1,46 @@
+body{
+    margin: 0%;
+    width: 99%;
+}
+img{
+    width: 50px;
+    height: 50px;
+}
+h3{
+    color: aliceblue;
+}
+
+.logoNav{
+     display: flex ;
+    justify-content: center;
+    padding-left: 10px;
+    align-items: center;
+    gap: 1em;
+}
+.navbar{
+    
+    height: 10vh;
+    display: flex;
+    justify-items: center;
+    justify-content:flex-start;
+    gap: 1em;
+    align-items: center;
+   
+    margin-right: 0%;
+    padding-left: 1vw;
+    background-color: #99D5EB;
+    width: 100%;
+}
+
+a{
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    font-weight: light;
+    color: beige;
+    
+    
+}
+a:hover{
+    color: #2286AA;
+}

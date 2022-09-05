@@ -1,0 +1,7 @@
+{%load static%}
+<link href={% static "css/messages.css" %} rel="stylesheet" >
+{% if messages %} {% for message in messages %}
+<div id="hideMeAfter5Seconds"><strong >{{message}}</strong></div>
+  
+
+{% endfor %} {% endif %}

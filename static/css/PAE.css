@@ -1,0 +1,98 @@
+body {
+    background-color: #eef8fc;
+  }
+  label {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    font-weight: bold;
+    margin-left: 5%;
+    color: #253d5b;
+  }
+  .sousTitre{
+    margin-top: 2%;
+   
+    font-family: Arial, Helvetica, sans-serif;
+   
+    font-weight: lighter;
+    margin-left: 5%;
+    color: #75766B;
+  }
+  .userTable{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 2rem;
+    color: #4775AE;
+    padding-bottom: 1.2rem;
+    margin-top: 0.5%;
+    margin-right: 5%;
+    margin-left: 5%;
+   
+}
+.userTab {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    border-radius: 10px;
+    width: 100%;
+  }
+
+  .userTab td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding-left: 0.3%;
+    padding-right: 0.3%;
+    
+    font-weight: bold;
+  }
+
+
+.userTab th {
+    border: 1px solid #ddd;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+    background-color: #4D7493;
+    color: white;
+  }
+  .btn{
+    text-indent: 1%;
+    width: 20%;
+    margin-top: 2.5%;
+    margin-bottom: 3%;
+    margin-left: 30%;
+  
+    border-radius: 1.875rem;
+    border-color: transparent;
+    background-color: #45cca4;
+    /* font-size:small; */
+    font-weight: bold;
+    text-align: center;
+  
+    box-sizing: border-box;
+  
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left:1%;
+    padding-right: 1%;
+  
+    border-style: outset;
+    border-color: transparent;
+  }
+  .btn:hover{
+    background-color: #7C98DF;
+    color: white;
+  }
+  .ltheader th,  .ltheader td{
+    text-align: center;
+
+  }
+
+  .userTabDate{
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    margin-left: 0%;
+    border-radius: 10px;
+    width: 100%;
+  }

@@ -1,0 +1,46 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+   
+    <link href={% static "css/modificateAction.css" %} rel="stylesheet" >
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>modifier action</title>
+      
+  </head>
+
+  <body>
+    
+    {%include 'navbar.html'%}
+    {%include 'messages.html'%}
+    <div class="modificateAction">
+    <form action="ModificateAction" name="ModificateAction" method="post" style="display:grid ;">
+        {% csrf_token%}
+        <input type="number" name="idPA1" id="idPA1" hidden value="{{idPA}}">
+        <input type="number" name="idAct" id="idAct" hidden value="{{act.idAct}}">
+        <label for="cause">Modifier la cause retenu de l'action :</label>
+        <textarea name="cause" id="cause" cols="50" rows="10">{{act.cause}}</textarea>
+        <label for="action">Modifier la cause retenu de l'action :</label>
+        <textarea name="action" id="action" cols="50" rows="10">{{act.action}}</textarea>
+        <label for="cr">Modifier les responsables de l'action : </label>
+        <div style="display:inline-block  ;">
+            {%for user in users%}
+            <div class="theNumber">
+            {{user}}
+                <input type="checkbox" name="resp{{user}}" value="{{user}}" id="resp{{user}}" {% if user in act.resp %} checked {%endif%} >
+              </div>
+                {%endfor%}
+        </div>  
+        <input class="disabledNumber" type="date" name="datePrevue" id="datePrevue" value="{{act.datePrevue}}">
+        <button class="btn" type="submit">Modifier</button>
+    </form>
+  </div>
+  </body>
+</html>

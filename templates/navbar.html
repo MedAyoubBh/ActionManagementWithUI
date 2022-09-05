@@ -1,0 +1,93 @@
+{%load static%}
+
+<nav class="navbar">
+  <div class="logoNav">
+    <form action="home" name="home" method="post">
+      {% csrf_token%} <img src="{% static "images/logo.png" %}" alt="logo
+      Quadiv-Tous" onclick="setTimeout(function() { document.home.submit() },
+      0)">
+    </form>
+    <h3>Quali-Tous</h3>
+</div>
+
+
+    {%if request.session.user %} {%if request.session.noPA == False %}
+
+    <form action="ConsultAllMyActions" name="myform2" method="post">
+      {% csrf_token%}
+      <a
+        href="ConsultAllMyActions"
+        onclick="setTimeout(function() { document.myform2.submit() }, 0)"
+      >
+        Consulter mes actions
+      </a>
+    </form>
+    
+    <form action="Consult" name="myform" method="post">
+      {% csrf_token%}
+      <a
+        href="Consult"
+        onclick="setTimeout(function() { document.myform.submit() }, 0)"
+      >
+        Consulter PA
+      </a>
+    </form>
+  
+    {%endif%}
+  
+    <form action="CreatePA" name="myform1" method="post">
+      {% csrf_token%}
+      <a
+        href="Consult"
+        onclick="setTimeout(function() { document.myform1.submit() }, 0)"
+      >
+        Nouveau PA
+      </a>
+    </form>
+  
+    <form action="ConsultUsers" name="ConsultUsers" method="post">
+      {% csrf_token%}
+      <a
+        href="ConsultUsers"
+        onclick="setTimeout(function() { document.ConsultUsers.submit() }, 0)"
+      >
+        Liste des Immatricules
+      </a>
+    </form>
+    {% if request.session.user.Immatricule == 3 %}
+  
+  
+    <form action="ConsultSecters" name="ConsultSecters" method="post">
+      {% csrf_token%}
+      <a
+        href="ConsultSecters"
+        onclick="setTimeout(function() { document.ConsultSecters.submit() }, 0)"
+      >
+        Consulter Secteurs
+      </a>
+    </form>
+  
+    <form action="DashboardForm" name="DashboardForm" method="post">
+      {% csrf_token%}
+      <a href="DashboardForm" onclick="setTimeout(function() { document.DashboardForm.submit() }, 0)">Tableau de bord</a>
+      </form>
+  
+    {%endif%}
+    <a href="Logout">Logout</a>
+    {%else%}
+    <a href="Login">Login</a>
+    {%endif%}
+  
+</nav>
+
+
+
+    
+       
+
+  
+ 
+
+    
+
+

@@ -1,0 +1,30 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href={% static "css/createSecter.css" %} rel="stylesheet" >
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>create user</title>
+      
+  </head>
+
+  <body>
+    {%include 'messages.html'%}
+    {%include 'navbar.html'%}
+    <div class="createSecter">
+    <form action="CreateSecter" name="CreateSecter" method="post" style="display:grid ;">
+        {% csrf_token%}
+        <label for="indicateur">Donner le Secteur :</label>
+        <input class="disabledNumber" type="text" name="nameSec" id="nameSec" >
+        <button class="btn" type="submit">Créer</button>
+    </form>
+  </div>
+  </body>
+</html>

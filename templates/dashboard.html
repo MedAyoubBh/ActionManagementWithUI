@@ -1,0 +1,121 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="ActionManagement" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link href={% static "css/dashboard.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>Dashboard</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+   
+      
+        <h1 class="sousTitre">Tableau de bord pour le(s) PA(s) : </h1>
+        {%for sect in sects%}
+          <h4 class="sousTitre liItem"><small>{{sect}}</small></h4>
+        {%endfor%}
+     
+      {%if resps %}
+          <h1 class="sousTitre">Pour les responsables : </h1>
+          {%for resp in resps%}
+            <h2 class="sousTitre"><small>{{resp}}</small></h2>
+          {%endfor%}
+      {%else%}
+        <h1 class="sousTitre">Pour tous les responsables </h1>
+      {%endif%}
+  
+    
+    <div class="userTable">
+      <h1 class="sousTitre tableTiltle">Table TRA </h1>
+      <table class="userTab">
+        <tr>
+          <th>PA</th>
+          <th>Trimestre 1</th>
+          <th>Trimestre 2</th>
+          <th>Trimestre 3</th>
+          <th>Trimestre 4</th>
+          <th>Moyenne</th>
+        </tr>
+        {% for sect,tra in TRA %}
+          <tr>
+            <td>{{sect}}</td>
+            {% for t in tra %}
+              <td>{{t}}</td>
+            {%endfor%}
+          </tr>
+        {%endfor%}
+      </table> 
+    </div>
+
+    <br>
+
+    <div class="userTable">
+      <h1 class="sousTitre tableTiltle">Table TRAT </h1>
+      <table class="userTab">
+        <tr>
+          <th>PA</th>
+          <th>Trimetre 1</th>
+          <th>Trimetre 2</th>
+          <th>Trimetre 3</th>
+          <th>Trimetre 4</th>
+          <th>Moyenne</th>
+        </tr>
+        {% for sect,trat in TRAT %}
+          <tr>
+            <td>{{sect}}</td>
+            {% for t in trat %}
+              <td>{{t}}</td>
+            {%endfor%}
+          </tr>
+        {%endfor%}
+      </table> 
+    </div>
+
+    <br>
+
+    <div class="userTable">
+      <h1 class="sousTitre tableTiltle">Table TCA </h1>
+      <table class="userTab">
+        <tr>
+          <th>PA</th>
+          <th>Trimetre 1</th>
+          <th>Trimetre 2</th>
+          <th>Trimetre 3</th>
+          <th>Trimetre 4</th>
+          <th>Moyenne</th>
+        </tr>
+        {% for sect,tca in TCA %}
+          <tr>
+            <td>{{sect}}</td>
+            {% for t in tca %}
+              <td>{{t}}</td>
+            {%endfor%}
+          </tr>
+        {%endfor%}
+      </table> 
+    </div>
+
+    <br>
+
+<div class="userTable">
+    <script src="http://yui.yahooapis.com/3.10.0/build/yui/yui-min.js"></script>
+    <h1 class="sousTitre">TRA et TRAT par PA</h1>
+    {{ chart1.as_html }}
+    <h3 class="statistic ">Moyen TRA = {{TRAMoyen}}</h3>
+    <h3 class="statistic">Moyen TRAT = {{TRATMoyen}}</h3>
+    <h1 class=" sousTitre">TCA par PA</h1>
+    {{ chart.as_html }}
+    <h3 class="statistic">Moyen TCA = {{TCAMoyen}}</h3>
+  </div>
+  </body>
+</html>

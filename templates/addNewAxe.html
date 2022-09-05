@@ -1,0 +1,33 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link href={% static "css/addNewAxe.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>Ajouter Axe</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+      <div class="CreateAxe">
+        <form action="CreateAxe" method="POST" enctype="multipart/form-data" style="display:grid ;">
+            {% csrf_token %}
+                <input type="number" name="idPA" id="idPA" value="{{idPA}}" hidden>
+                <input type="number" name="nbAxe" id="nbAxe" value="{{nbAxe}}" hidden>
+                <label for="nbProbs">Axe Problème N°: </label>
+                <input class="disabledNumber" type="number" name="nbAxes" id="nbAxes" value="{{nbAxe}}" disabled>
+                <label for="domainProb">Donner l'indicateur de l'Axe : </label>
+                <input class="disabledNumber" type="text" name="indicateur" id="indicateur" required>
+                <input class="btn" type="submit" value="Create">
+        </form>
+      </div>
+  </body>
+</html>

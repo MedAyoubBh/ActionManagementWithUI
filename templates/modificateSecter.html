@@ -1,0 +1,33 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link href={% static "css/modificateSecter.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>modifier Secteur</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+    <div class="modificateSeceter">
+      <form action="ModificateSecter" name="ModificateSecter" method="post" style="display:grid ;">
+        {% csrf_token%}
+        <input type="text" name="nameSecLast" id="nameSecLast" hidden value="{{sect}}">
+        <label for="indicateur">Modifier le Secteur :</label>
+        <input class="disabledNumber" type="text" name="nameSec" id="nameSec" value="{{sect}}">
+        </select>
+        <button class="btn" type="submit">Modifier</button>
+    </form>
+    </div>
+    
+  </body>
+</html>

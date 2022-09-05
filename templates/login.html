@@ -1,0 +1,36 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+  
+  
+    <link href={% static "css/login.css" %} rel="stylesheet" >
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>Login</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+      {%include 'messages.html'%}
+      <div class="LoginForm">
+        <form action="Login" name="Login" method="POST" enctype="multipart/form-data" style="display:grid ;">
+            {% csrf_token %}
+            <h1>Login</h1>
+            <label class="labelStyle" for="immatricule">Immatricule : </label>
+            <input type="number" name="immatricule" id="immatricule" placeholder="votre immatricule" required>
+            <label class="labelStyle" for="pwd">Mot de passe : </label>
+            <input  type="password" name="pwd" id="pwd" placeholder="votre mots de passe" required>
+            <br>
+            <input type="submit" value="Login" id="btn">
+        </form>
+      </div>
+  </body>
+</html>

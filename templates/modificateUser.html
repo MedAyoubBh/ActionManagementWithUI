@@ -1,0 +1,38 @@
+{%load static%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8 general">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href={% static "css/navbar.css" %} rel="stylesheet" >
+    <link href={% static "css/modificateUser.css" %} rel="stylesheet" >
+    <link rel="shortcut icon" href="../static/images/favicon.ico">
+
+    <title>modifier user</title>
+      
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+    <h1 class="sousTitre">Modifier Les parametres d'utilisateur</h1>
+    <div class="modificateUser">
+      <form action="ModificateUser" name="ModificateUser" method="post" style="display:grid ;">
+        {% csrf_token%}
+        <input class="disabledNumber" type="number" name="lastImmatricule" id="lastImmatricule" value="{{user.Immatricule}}" hidden>
+        <label for="indicateur">Modifier l'immatricule de l'utilisateur :</label>
+        <input class="disabledNumber" type="number" name="immatricule" id="immatricule" value="{{user.Immatricule}}">
+        <label for="indicateur">Modifier le nom de l'utilisateur :</label>
+        <input class="disabledNumber" type="text" name="FirstName" id="FirstName" value="{{user.FirstName}}">
+        <label for="indicateur">Modifier le prénom de l'utilisateur :</label>
+        <input class="disabledNumber" type="text" name="LastName" id="LastName" value="{{user.LastName}}">
+        <label for="indicateur">Modifier le mot de passe de l'utilisateur :</label>
+        <input class="disabledNumber" type="text" name="pwd" id="pwd" value="{{user.pwd}}">
+        <button class="btn" type="submit">Modifier</button>
+    </form>
+    </div>
+    
+  </body>
+</html>

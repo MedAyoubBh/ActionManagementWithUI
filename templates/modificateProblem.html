@@ -23,7 +23,7 @@
         <input type="number" name="idPA1" id="idPA1" hidden value="{{idPA}}">
         <input type="number" name="idProb" id="idProb" hidden value="{{prob.idProb}}">
         <label for="indicateur">Modifier la description du problèmes :</label>
-        <textarea name="probDesc" id="probDesc" cols="50" rows="10">{{prob.descriptionProb}}</textarea>
+        <textarea name="probDesc" id="probDesc" cols="50" rows="10">{{prob.descriptionProb|safe}}</textarea>
         <label for="cr">Modifier la criticité du problème : </label>
                 <select class="disabledNumber" name="cr" id="cr">
                     {%for i in crList%}

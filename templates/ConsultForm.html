@@ -30,7 +30,7 @@
     <form class="Cform" action="Consult" method="POST" enctype="multipart/form-data" style="display: grid">
       {% csrf_token%}
       <select class="disabledNumber" name="sects" id="sects" hidden>
-        <option class="optionCss" value="{{sect}}" selected>{{sect}}</option>
+        <option class="optionCss" value="{{sect|safe}}" selected>{{sect|safe}}</option>
       </select>
       <input type="number" name="nbPA" id="nbPA" value="{{lastNbPA}}" hidden />
       <select class="disabledNumber" name="nbPA" id="nbPA" hidden>
@@ -38,7 +38,7 @@
       </select>
       <label for="sects">Le secteur du plan d'action</label>
       <select class="disabledNumber" name="sects" id="sects" disabled>
-        <option class="optionCss" value="{{sect}}" selected>{{sect}}</option>
+        <option class="optionCss" value="{{sect|safe}}" selected>{{sect|safe}}</option>
       </select>
       <label for="nbPA">Le numéro du plan d'action : </label>
       <select class="disabledNumber" name="nbPA" id="nbPA" disabled>
@@ -63,12 +63,12 @@
     <form class="Cform" action="Consult" method="POST" enctype="multipart/form-data" style="display: grid">
       {% csrf_token%}
       <select class="disabledNumber" name="sects" id="sects" hidden>
-        <option class="optionCss" value="{{sect}}" selected>{{sect}}</option>
+        <option class="optionCss" value="{{sect|safe}}" selected>{{sect|safe}}</option>
       </select>
       <input type="number" name="nbPA" id="nbPA" value="{{lastNbPA}}" hidden />
       <label for="sects">Le secteur du plan d'action</label>
       <select class="disabledNumber" name="sects" id="sects" disabled>
-        <option value="{{sect}}" selected>{{sect}}</option>
+        <option value="{{sect|safe}}" selected>{{sect|safe}}</option>
       </select>
       <label for="nbPA">Sélectionner le numéro du plan d'action : </label>
       <select class="disabledNumber" name="nbPA" id="nbPA" spellcheck="true" required>
@@ -87,7 +87,7 @@
       <label for="secteurs">Sélectionner le secteur du plan d'action</label>
       <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
         {%for sect in sects%}
-        <option value="{{sect.nameSec.0}}">{{sect.nameSec.0}}</option>
+        <option value="{{sect.nameSec.0|safe}}">{{sect.nameSec.0|safe}}</option>
         {%endfor%}
       </select>
       <input class="btn" type="submit" value="Confirm" />

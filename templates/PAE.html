@@ -25,7 +25,7 @@
         <table class="userTab">
             <tr>
                 <th class="logo"><img src="{% static "images/logoSidilec.png" %}" alt="logo Quali-Tous" style="width: 80px;height: 80px;"></th>
-                <th class="audit"><b>{{pa.nomPA}} </b> N°: {{pa.nbPA}}</th>
+                <th class="audit"><b>{{pa.nomPA|safe}} </b> N°: {{pa.nbPA}}</th>
                 <th class="page"><b>Page: </b>{{pa.pagePA}} </th>
             </tr>
         </table>
@@ -49,7 +49,7 @@
                     <td colspan="2">
                       <table class="userTab">
                         <tr>
-                          <td class="pilote"><b>Pilote : </b>{{pilote}} <br> </td>
+                          <td class="pilote"><b>Pilote : </b>{{pilote|safe}} <br> </td>
                           <td class="secteur"><b>Secteur : </b>{{pa.secteurPA}} <br> </td>
                           <td class="Date"><b>Date : </b>{{pa.datePA}} <br> </td>
                           
@@ -190,7 +190,7 @@
     <div class="respFilter">
       <form action="Consult" id="respFilterForm" name="respFilterForm" method="post" enctype="multipart/form-data" style="display:flexbox ;">
         {%csrf_token%}
-        <input type="text" name="sects" id="sects" value="{{pa.nomPA}}" hidden>
+        <input type="text" name="sects" id="sects" value="{{pa.nomPA|safe}}" hidden>
         <input type="number" name="nbPA" id="nbPA" value="{{pa.nbPA}}" hidden>
         <input type="number" name="pagePA" id="pagePA" value="{{pa.pagePA}}" hidden>
         <label for="nbPA"><b>Filtrer les actions par : </b></label>
@@ -223,7 +223,7 @@
               <tr>
                 <td class="axeNumber">{{aPAA.0.nbAxe}}</td>
                 <td class="probDomain">
-                  <b>{{aPAA.0.indicateur}}</b>
+                  <b>{{aPAA.0.indicateur|safe}}</b>
                   {%if request.session.user.Name == pilote %}
                     <form action="ModificateAxe" class="ModificateAxe" name="ModificateAxe" method="post">
                       {%csrf_token%}
@@ -240,7 +240,7 @@
                 <tr class="row">
                   <td class="probNumber" rowspan="{{pAA.1}}">{{aPAA.0.nbAxe}}-{{pAA.0.nbProb}}</td>
                   <td class="probDescription" rowspan="{{pAA.1}}">
-                    {{pAA.0.descriptionProb}}
+                    {{pAA.0.descriptionProb|safe}}
                     {%if request.session.user.Name == pilote %}
                       <form action="ModificateProblem" class="ModificateProblem" name="ModificateProblem1" method="post">
                         {%csrf_token%}
@@ -265,8 +265,8 @@
                 {%if pAA.3%}
                   {%for action in pAA.3%}
                     <tr class="row">
-                      <td class="theader" id="causesRetenues">{{action.cause}}</td>
-                      <td class="theader" id="actionsCorrectives">{{action.action}}</td>
+                      <td class="theader" id="causesRetenues">{{action.cause|safe}}</td>
+                      <td class="theader" id="actionsCorrectives">{{action.action|safe}}</td>
                       <td class="theader" id="responsable">{{action.resp}}</td>
                       <td class="theader" id="datePrevue">{{action.datePrevue}}</td>
                       <td class="ltheader" id="P">

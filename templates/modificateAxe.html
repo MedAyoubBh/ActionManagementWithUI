@@ -23,8 +23,8 @@
         {% csrf_token%}
         <input type="number" name="idPA1" id="idPA1" hidden value="{{idPA}}">
         <input type="number" name="idAxe" id="idAxe" hidden value="{{axe.idAxe}}">
-        <label for="indicateur">Modifier l'indicateur du problèmes :</label>
-        <textarea name="indicateur" id="indicateur" cols="50" rows="10">{{axe.indicateur}}</textarea>
+        <label for="indicateur">Modifier l'indicateur du problème :</label>
+        <textarea name="indicateur" id="indicateur" cols="50" rows="10">{{axe.indicateur|safe}}</textarea>
         <button class="btn" type="submit">Modifier</button>
     </form>
   </div>

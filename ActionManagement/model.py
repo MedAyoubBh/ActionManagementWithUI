@@ -1,6 +1,7 @@
 import datetime
 from operator import truediv
 import re
+from tkinter import E
 from django.db import models
 import psycopg2
 from zmq import NULL

@@ -24,12 +24,12 @@
         <form action="PAE" method="POST" enctype="multipart/form-data" style="display:grid ;">
             {% csrf_token%}
                 <select class="disabledNumber" name="sects" id="sects" hidden>
-                  <option value="{{sect}}" selected>{{sect}}</option>
+                  <option value="{{sect|safe}}" selected>{{sect|safe}}</option>
                 </select>
                 <input type="number" name="nbPA" id="nbPA" value="{{lastNbPA}}" hidden>
                 <label for="sects">Le secteur du plan d'action</label>
                 <select class="disabledNumber" name="sects" id="sects" disabled>
-                        <option value="{{sect}}" selected>{{sect}}</option>
+                        <option value="{{sect|safe}}" selected>{{sect|safe}}</option>
                 </select>
                 <label for="nbPA">N°: </label>
                 <input class="disabledNumber" type="number" name="nbPA" id="nbPA" value="{{lastNbPA}}" disabled>
@@ -69,7 +69,7 @@
                   <label for="secteurs">Sélectionner le secteur du plan d'action</label>
                   <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
                       {%for sect in sects%}
-                          <option value="{{sect.nameSec.0}}">{{sect.nameSec.0}}</option>
+                          <option value="{{sect.nameSec.0|safe}}">{{sect.nameSec.0|safe}}</option>
                       {%endfor%}
                   </select>
                   <input class="btn" type="submit" value="Confirm">

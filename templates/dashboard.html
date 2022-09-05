@@ -22,7 +22,7 @@
       
         <h1 class="sousTitre">Tableau de bord pour le(s) PA(s) : </h1>
         {%for sect in sects%}
-          <h4 class="sousTitre liItem"><small>{{sect}}</small></h4>
+          <h4 class="sousTitre liItem"><small>{{sect|safe}}</small></h4>
         {%endfor%}
      
       {%if resps %}
@@ -48,7 +48,7 @@
         </tr>
         {% for sect,tra in TRA %}
           <tr>
-            <td>{{sect}}</td>
+            <td>{{sect|safe}}</td>
             {% for t in tra %}
               <td>{{t}}</td>
             {%endfor%}
@@ -72,7 +72,7 @@
         </tr>
         {% for sect,trat in TRAT %}
           <tr>
-            <td>{{sect}}</td>
+            <td>{{sect|safe}}</td>
             {% for t in trat %}
               <td>{{t}}</td>
             {%endfor%}
@@ -96,7 +96,7 @@
         </tr>
         {% for sect,tca in TCA %}
           <tr>
-            <td>{{sect}}</td>
+            <td>{{sect|safe}}</td>
             {% for t in tca %}
               <td>{{t}}</td>
             {%endfor%}

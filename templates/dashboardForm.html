@@ -28,7 +28,7 @@
                 <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
                     <option value="tous" selected>Tous</option>
                     {%for sect in sects%}
-                        <option value="{{sect.nameSec.0}}">{{sect.nameSec.0}}</option>
+                        <option value="{{sect.nameSec.0|safe}}">{{sect.nameSec.0|safe}}</option>
                     {%endfor%}
                 </select>
                 <div class="filterByTime">

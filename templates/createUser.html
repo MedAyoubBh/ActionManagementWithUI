@@ -26,9 +26,9 @@
         <label for="indicateur">Donner l'immatricule de l'utilisateur :</label>
         <input class="disabledNumber" type="number" name="immatricule" id="immatricule" value="{{user.Immatricule}}">
         <label for="indicateur">Donner le nom de l'utilisateur :</label>
-        <input class="disabledNumber" type="text" name="FirstName" id="FirstName" value="{{user.FirstName}}">
+        <input class="disabledNumber" type="text" name="FirstName" id="FirstName" value="{{user.FirstName|safe}}">
         <label for="indicateur">Donner le prénom de l'utilisateur :</label>
-        <input class="disabledNumber" type="text" name="LastName" id="LastName" value="{{user.LastName}}">
+        <input class="disabledNumber" type="text" name="LastName" id="LastName" value="{{user.LastName|safe}}">
         <label for="indicateur">Donner le mot de passe de l'utilisateur :</label>
         <input class="disabledNumber" type="text" name="pwd" id="pwd" value="{{user.pwd}}">
         <button class="btn" type="submit">Créer</button>

@@ -27,9 +27,9 @@
                 <label for="nbAct">Action N°: </label>
                 <input class="disabledNumber" type="number" name="nbAct" id="nbAct" value="{{nbAct}}" disabled>
                 <label for="causeAct">Donner la cause de l'action : </label>
-                <textarea name="causeAct" id="causeAct" cols="60" rows="10" required>{%if cause %} {{cause}} {%endif%}</textarea>
+                <textarea name="causeAct" id="causeAct" cols="60" rows="10" required>{%if cause %} {{cause|safe}} {%endif%}</textarea>
                 <label for="actionAct">Donner l'action : </label> 
-                <textarea name="actionAct" id="actionAct" cols="60" rows="10" required>{%if action %} {{action}} {%endif%}</textarea>
+                <textarea name="actionAct" id="actionAct" cols="60" rows="10" required>{%if action %} {{action|safe}} {%endif%}</textarea>
                 <label for="">Sélectionner les responsables dans cet action : </label>
                 {%for resp in resps%}
                 <div class="theNumber">

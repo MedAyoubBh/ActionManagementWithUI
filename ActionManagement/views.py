@@ -66,7 +66,7 @@ def createProblem(request):
         p.idAxe = request.POST["idAxe"]
         idPA = request.POST["idPA"]
         p.nbProb = request.POST["nbProb"]
-        p.descriptionProb = request.POST["descriptionProb"]
+        p.descriptionProb = inputReformat(request.POST["descriptionProb"])
         p.cr = request.POST["cr"]
         model.Problem.Insert(p)
         return render(request,'created.html',{"idPA":idPA})
@@ -85,7 +85,7 @@ def createAxe(request):
         p=model.Axe()               
         p.idPA = request.POST["idPA"]
         p.nbAxe = request.POST["nbAxe"]
-        p.indicateur = request.POST["indicateur"]
+        p.indicateur = inputReformat(request.POST["indicateur"])
         model.Axe.Insert(p)
         return render(request,'created.html',{"idPA":p.idPA})
     else:
@@ -106,8 +106,8 @@ def createAction(request):
         idPA=request.POST["idPA"]           
         p.idProb = request.POST["idProb"]
         p.nbAct = request.POST["nbAct"]
-        p.cause = request.POST["causeAct"]
-        p.action = request.POST["actionAct"]
+        p.cause = inputReformat(request.POST["causeAct"])
+        p.action = inputReformat(request.POST["actionAct"])
         p.resp=[]
         for i in model.User.Find_All_id():
             if request.POST.get("resp"+str(i)):
@@ -547,7 +547,7 @@ def modificateAxe(request):
     if request.method == 'POST' and request.POST.get("idPA1",False):
         idPA=request.POST["idPA1"]
         idAxe=request.POST["idAxe"]
-        indicateur=request.POST["indicateur"]
+        indicateur=inputReformat(request.POST["indicateur"])
         axe=model.Axe.Find_By_idAxe(idAxe)
         axe.indicateur=indicateur
         model.Axe.UpdateAxe(axe)
@@ -557,6 +557,7 @@ def modificateAxe(request):
         idPA=request.POST["idPA"]
         idAxe=request.POST["idAxe"]
         axe=model.Axe.Find_By_idAxe(idAxe)
+        axe.indicateur=outputReformat(axe.indicateur)
         dict={"axe":axe,"idPA":idPA}
         return render(request,'modificateAXe.html',dict)
     else:
@@ -567,7 +568,7 @@ def modificateProblem(request):
     if request.method == 'POST' and request.POST.get("idPA1",False):
         idPA=request.POST["idPA1"]
         idProb=request.POST["idProb"]
-        desc=request.POST["probDesc"]
+        desc=inputReformat(request.POST["probDesc"])
         cr=int(request.POST["cr"])
         prob=model.Problem.Find_By_idProb(idProb)
         prob.descriptionProb=desc
@@ -580,6 +581,7 @@ def modificateProblem(request):
         idProb=request.POST["idProb"]
         l=[1,2,3]
         prob=model.Problem.Find_By_idProb(idProb)
+        prob.descriptionProb=outputReformat(prob.descriptionProb)
         dict={"prob":prob,"idPA":idPA,"crList":l}
         return render(request,'modificateProblem.html',dict)
     else:
@@ -591,8 +593,8 @@ def modificateAction(request):
         idPA=request.POST["idPA1"]
         idAct=request.POST["idAct"]
         act=model.Action.Find_By_idAct(idAct)
-        act.cause=request.POST["cause"]
-        act.action=request.POST["action"]
+        act.cause=inputReformat(request.POST["cause"])
+        act.action=inputReformat(request.POST["action"])
         act.resp=[]
         for i in model.User.Find_All_id():
             if request.POST.get("resp"+str(i)):
@@ -601,12 +603,16 @@ def modificateAction(request):
             users = model.User.Find_All_id()
             act.datePrevue=str(act.datePrevue)
             messages.error(request,'Vous devez sélectionner au minimum 1 personne pour être responsable d\'action!')
+            act.cause=outputReformat(act.cause)
+            act.action=outputReformat(act.action)
             dict={"act":act,"idPA":idPA,"users":users}
             return render(request,'modificateAction.html',dict)
         if len(act.resp)>2:
             users = model.User.Find_All_id()
             act.datePrevue=str(act.datePrevue)
             messages.error(request,'Vous devez sélectionner au maximum 2 personnes pour responsable d\'action!')
+            act.cause=outputReformat(act.cause)
+            act.action=outputReformat(act.action)
             dict={"act":act,"idPA":idPA,"users":users}
             return render(request,'modificateAction.html',dict)
         datePrevue=request.POST["datePrevue"]
@@ -614,6 +620,8 @@ def modificateAction(request):
             users = model.User.Find_All_id()
             act.datePrevue=str(act.datePrevue)
             messages.error(request,'La date prévue doit être supérieur à la date actuelle!')
+            act.cause=outputReformat(act.cause)
+            act.action=outputReformat(act.action)
             dict={"act":act,"idPA":idPA,"users":users}
             return render(request,'modificateAction.html',dict)
         act.datePrevue=datePrevue
@@ -626,6 +634,8 @@ def modificateAction(request):
         act=model.Action.Find_By_idAct(idAct)
         users=model.User.Find_All_id()
         act.datePrevue=str(act.datePrevue)
+        act.cause=outputReformat(act.cause)
+        act.action=outputReformat(act.action)
         dict={"act":act,"idPA":idPA,"users":users}
         return render(request,'modificateAction.html',dict)
     else:
@@ -663,8 +673,8 @@ def createUser(request):
     if request.method == 'POST' and request.POST.get("immatricule",False):
         user=model.User()
         user.Immatricule=int(request.POST["immatricule"])
-        user.FirstName=request.POST["FirstName"]
-        user.LastName=request.POST["LastName"]
+        user.FirstName=inputReformat(request.POST["FirstName"])
+        user.LastName=inputReformat(request.POST["LastName"])
         user.pwd=request.POST["pwd"]
         if user.Immatricule in model.User.Find_All_id():
             messages.error(request,'Cet Immatricule existe déjà!')
@@ -692,8 +702,8 @@ def modificateUser(request):
             else:
                 user=model.User.FindByIdImm(lastImm)
                 user.Immatricule=imm
-                user.FirstName=request.POST["FirstName"]
-                user.LastName=request.POST["LastName"]
+                user.FirstName=inputReformat(request.POST["FirstName"])
+                user.LastName=inputReformat(request.POST["LastName"])
                 user.pwd=request.POST["pwd"]
                 model.User.createUser(user)
                 model.User.UpdateUserInPA_Axe_Prob_Act(lastImm,imm)
@@ -702,8 +712,8 @@ def modificateUser(request):
         else:
             user=model.User.FindByIdImm(lastImm)
             user.Immatricule=imm
-            user.FirstName=request.POST["FirstName"]
-            user.LastName=request.POST["LastName"]
+            user.FirstName=inputReformat(request.POST["FirstName"])
+            user.LastName=inputReformat(request.POST["LastName"])
             user.pwd=request.POST["pwd"]
             model.User.UpdateUser(user,lastImm)
             return render(request,'createdUser.html')
@@ -725,8 +735,8 @@ def consultSecters(request):
 
 def modificateSecter(request):
     if request.method == 'POST' and request.POST.get("nameSecLast",False):
-        sec=request.POST["nameSec"]
-        lastSec=request.POST["nameSecLast"]
+        sec=inputReformat(request.POST["nameSec"])
+        lastSec=inputReformat(request.POST["nameSecLast"])
         model.Secteur.Update(sec,lastSec)
         messages.success(request,'Secteur modifié avec succès!')
         return render(request,'createdSecter.html')
@@ -741,7 +751,7 @@ def deleteSecter(request):
     if request.method == 'POST':
         nameSec=request.POST["nameSec"]
         try:
-            model.Secteur.delete(nameSec)
+            model.Secteur.delete(inputReformat(nameSec))
         except:
             messages.error(request,'Secteur ne peut pas être supprimé! Ce secteur est utilisé dans un ou plusieurs Plan d\'action(s)!')
             sects=model.Secteur.Find_All_Sects()
@@ -756,7 +766,7 @@ def createSecter(request):
     if request.method == 'POST' and request.POST.get("nameSec",False):
         nameSec=request.POST["nameSec"]
         try:
-           model.Secteur.insert(nameSec)
+           model.Secteur.insert(inputReformat(nameSec))
         except:
             messages.error(request,'Secteur existe déjà!')
             sects=model.Secteur.Find_All_Sects()
@@ -1031,3 +1041,17 @@ def consultAllMyActions(request):
         return render(request,'consultAllMyActions.html',dict)
     else:
         return redirect('home')
+
+def inputReformat(text):
+    text=text.split('\r\n')
+    text='<br />'.join(text)
+    text=text.split("'")
+    text="''".join(text)
+    return text
+
+def outputReformat(text):
+    text=text.split('<br />')
+    text='\r\n'.join(text)
+    text=text.split("''")
+    text="'".join(text)
+    return text

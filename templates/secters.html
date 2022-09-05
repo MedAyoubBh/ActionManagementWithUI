@@ -32,20 +32,20 @@
             {%if sects %}
                 {%for sect in sects%}
                     <tr>
-                        <td id="nameSec" class="box">{{sect.0}}</td>
+                        <td id="nameSec" class="box">{{sect.0|safe}}</td>
                         <td id="modifier" class="ltheader">
-                            <form action="ModificateSecter" class="ModificateSecter" name="ModificateSecter{{sect.0}}" method="post">
+                            <form action="ModificateSecter" class="ModificateSecter" name="ModificateSecter{{sect.0|safe}}" method="post">
                                 {%csrf_token%}
-                                <input type="text" name="nameSec" id="nameSec" value="{{sect.0}}" hidden>
+                                <input type="text" name="nameSec" id="nameSec" value="{{sect.0|safe}}" hidden>
                                 <button type="submit">
                                     <img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png"/>
                                 </button>
                             </form>
                         </td>
                         <td id="delete" class="ltheader">
-                            <form action="DeleteSecter" class="DeleteSecter" name="DeleteSecter{{sect.0}}" method="post">
+                            <form action="DeleteSecter" class="DeleteSecter" name="DeleteSecter{{sect.0|safe}}" method="post">
                                 {%csrf_token%}
-                                <input type="text" name="nameSec" id="nameSec" value="{{sect.0}}" hidden>
+                                <input type="text" name="nameSec" id="nameSec" value="{{sect.0|safe}}" hidden>
                                 <button type="submit">
                                     <img src="https://img.icons8.com/glyph-neue/64/000000/delete-forever.png"/>
                                 </button>

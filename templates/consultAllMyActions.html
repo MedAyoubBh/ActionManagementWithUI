@@ -38,8 +38,8 @@
                 {%if myActs%}
                     {%for action in myActs%}
                         <tr class="row">
-                            <td class="theader" id="causesRetenues">{{action.cause}}</td>
-                            <td class="theader" id="actionsCorrectives">{{action.action}}</td>
+                            <td class="theader" id="causesRetenues">{{action.cause|safe}}</td>
+                            <td class="theader" id="actionsCorrectives">{{action.action|safe}}</td>
                             <td class="theader" id="responsable">{{action.resp}}</td>
                             <td class="theader" id="datePrevue">{{action.datePrevue}}</td>
                             <td class="ltheader" id="P">
@@ -134,8 +134,8 @@
                     {%if myCheckerActs%}
                         {%for action in myCheckerActs%}
                             <tr class="row">
-                                <td class="theader" id="causesRetenues">{{action.cause}}</td>
-                                <td class="theader" id="actionsCorrectives">{{action.action}}</td>
+                                <td class="theader" id="causesRetenues">{{action.cause|safe}}</td>
+                                <td class="theader" id="actionsCorrectives">{{action.action|safe}}</td>
                                 <td class="theader" id="responsable">{{action.resp}}</td>
                                 <td class="theader" id="datePrevue">{{action.datePrevue}}</td>
                                 <td class="ltheader" id="P">
@@ -230,8 +230,8 @@
                         {%if myActorActs%}
                             {%for action in myActorActs%}
                                 <tr class="row">
-                                    <td class="theader" id="causesRetenues">{{action.cause}}</td>
-                                    <td class="theader" id="actionsCorrectives">{{action.action}}</td>
+                                    <td class="theader" id="causesRetenues">{{action.cause|safe}}</td>
+                                    <td class="theader" id="actionsCorrectives">{{action.action|safe}}</td>
                                     <td class="theader" id="responsable">{{action.resp}}</td>
                                     <td class="theader" id="datePrevue">{{action.datePrevue}}</td>
                                     <td class="ltheader" id="P">

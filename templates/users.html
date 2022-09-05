@@ -37,8 +37,8 @@
                 {%for user in users%}
                     <tr>
                         <td id="Immatricule" class="box">{{user.Immatricule}}</td>
-                        <td id="FirstName" class="box">{{user.FirstName}}</td>
-                        <td id="LastName" class="box">{{user.LastName}}</td>
+                        <td id="FirstName" class="box">{{user.FirstName|safe}}</td>
+                        <td id="LastName" class="box">{{user.LastName|safe}}</td>
                         {% if request.session.user.Immatricule == 3 %}
                             <td id="pwd" class="box">{{user.pwd}}</td>
                             <td id="modifier" class="box">

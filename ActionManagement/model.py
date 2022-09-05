@@ -324,16 +324,47 @@ class User():
     def DeleteUser(imm):
         conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
         cursor = conn.cursor()
+        
+        st='''Update public."PA" Set "piloteImm"= '''+'3'+''' where "piloteImm"='''+str(imm)+''' ;commit;'''
+        cursor.execute(st)
+
         st='''Select "idPA", participants from public."PA" where '{'''+str(imm)+'''}' && participants;'''
         cursor.execute(st)
         result=cursor.fetchall()
-        if result==[]:
-            st='''Delete from public."User" where "Immatricule"='''+str(imm)+''';commit;'''
+        idPAs=[]
+        parts=[]
+        for res in result:
+            idPAs.append(res[0])
+            parts.append(res[1])
+        
+        for idPA,part in zip(idPAs,parts):
+            part.remove(int(imm))
+            part=str(part)
+            part=part.replace('[','{')
+            part=part.replace(']','}')
+            st='''Update public."PA" Set "participants"= \''''+part+'''\' where "idPA"='''+str(idPA)+''' ;commit;'''
             cursor.execute(st)
-            return True
-        else:
-            conn.close()
-            return False
+        
+        st='''Select "idAct", resp from public."Action" where '{'''+str(imm)+'''}' && resp;'''
+        cursor.execute(st)
+        result=cursor.fetchall()
+        idActs=[]
+        resp=[]
+        for res in result:
+            idActs.append(res[0])
+            resp.append(res[1])
+        
+        for idAct,r in zip(idActs,resp):
+            r.remove(int(imm))
+            r=str(r)
+            r=r.replace('[','{')
+            r=r.replace(']','}')
+            st='''Update public."Action" Set "resp"= \''''+r+'''\' where "idAct"='''+str(idAct)+''' ;commit;'''
+            cursor.execute(st)
+        
+        st='''Delete from public."User" where "Immatricule"='''+str(imm)+''';commit;'''
+        cursor.execute(st)
+        conn.close()
         
 
     def createUser(user):

@@ -652,18 +652,7 @@ def consultUsers(request):
 def deleteUser(request):
     if request.method == 'POST':
         imm=int(request.POST["Immatricule"])
-        try:
-            deleted=model.User.DeleteUser(imm)
-            if not deleted:
-                messages.error(request,'Utilisateur ne peut pas être supprimé! Cet utilisateur est utilisé dans un ou plusieurs Plan d\'action(s)!')
-                users=model.User.Find_All()
-                dict={"users":users}
-                return render(request,'users.html',dict)
-        except:
-            messages.error(request,'Utilisateur ne peut pas être supprimé! Cet utilisateur est utilisé dans un ou plusieurs Plan d\'action(s)!')
-            users=model.User.Find_All()
-            dict={"users":users}
-            return render(request,'users.html',dict)
+        model.User.DeleteUser(imm)
         messages.success(request,'Utilisateur supprimée avec succès!')
         return render(request,'createdUser.html')
     else:

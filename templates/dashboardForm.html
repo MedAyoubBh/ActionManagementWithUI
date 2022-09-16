@@ -13,7 +13,7 @@
     <link href={% static "css/navbar.css" %} rel="stylesheet" >
     <link rel="shortcut icon" href="../static/images/favicon.ico">
 
-    <title>Ajouter Action</title>
+    <title>Tableau de bord</title>
       
   </head>
 
@@ -24,7 +24,7 @@
       <div class="Dashboard">
         <form action="Dashboard" name="Dashboard" method="POST" enctype="multipart/form-data" style="display:grid ;">
             {% csrf_token %}
-                <label for="nbAct">Filtrer PA par : </label>
+                <label for="nbAct">Filtrer par PA : </label>
                 <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
                     <option value="tous" selected>Tous</option>
                     {%for sect in sects%}

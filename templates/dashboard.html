@@ -12,7 +12,7 @@
     <link href={% static "css/dashboard.css" %} rel="stylesheet" >
     <link rel="shortcut icon" href="../static/images/favicon.ico">
 
-    <title>Dashboard</title>
+    <title>Tableau de bord</title>
       
   </head>
 
@@ -26,7 +26,7 @@
         {%endfor%}
      
       {%if resps %}
-          <h1 class="sousTitre">Pour les responsables : </h1>
+          <h1 class="sousTitre">Pour le(s) responsable(s) : </h1>
           {%for resp in resps%}
             <h2 class="sousTitre"><small>{{resp}}</small></h2>
           {%endfor%}
@@ -111,11 +111,11 @@
     <script src="http://yui.yahooapis.com/3.10.0/build/yui/yui-min.js"></script>
     <h1 class="sousTitre">TRA et TRAT par PA</h1>
     {{ chart1.as_html }}
-    <h3 class="statistic ">Moyen TRA = {{TRAMoyen}}</h3>
-    <h3 class="statistic">Moyen TRAT = {{TRATMoyen}}</h3>
+    <h3 class="statistic ">Moyen TRA = {{TRAMoyen}}%</h3>
+    <h3 class="statistic">Moyen TRAT = {{TRATMoyen}}%</h3>
     <h1 class=" sousTitre">TCA par PA</h1>
     {{ chart.as_html }}
-    <h3 class="statistic">Moyen TCA = {{TCAMoyen}}</h3>
+    <h3 class="statistic">Moyen TCA = {{TCAMoyen}}%</h3>
   </div>
   </body>
 </html>

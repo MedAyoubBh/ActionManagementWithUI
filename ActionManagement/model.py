@@ -1,10 +1,6 @@
 import datetime
-from operator import truediv
-import re
-from tkinter import E
 from django.db import models
 import psycopg2
-from zmq import NULL
 
 
 class Secteur():
@@ -90,6 +86,53 @@ class PA():
     nbRev = 0
     C = []
     A = []
+
+    def getAllMyPA(imm):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        imm=str(imm)
+        st='''Select "idPA","nomPA","nbPA","pagePA","datePA","piloteImm","secteurPA","participants","dateRev","nbRev","C","A" from public."PA" where "piloteImm"=\''''+imm+'''\'order By "nomPA","nbPA", "pagePA", "idPA","datePA";'''
+        cursor.execute(st)
+        result = cursor.fetchall()
+        myPA=[]
+        for res in result:
+            s = PA()
+            s.idPA=res[0]
+            s.nomPA=res[1]
+            s.nbPA=res[2]
+            s.pagePA=res[3]
+            s.datePA=res[4]
+            s.piloteImm=res[5]
+            s.secteurPA=res[6]
+            s.participants=res[7]
+            q=""
+            for r in s.participants:
+                try:
+                    q+=User.FindById(r)+', '
+                except:
+                    q=q
+            s.participants=q[:-2]
+            s.dateRev=res[8]
+            s.nbRev=res[9]
+            s.C=res[10]
+            q=""
+            for r in s.C:
+                try:
+                    q+=User.FindById(r)+', '
+                except:
+                    q=q
+            s.C=q[:-2]
+            s.A=res[11]
+            q=""
+            for r in s.A:
+                try:
+                    q+=User.FindById(r)+', '
+                except:
+                    q=q
+            s.A=q[:-2]
+            myPA.append(s)
+        conn.close()
+        return myPA
 
     def UpdateActors(pa):
         conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
@@ -589,27 +632,28 @@ class Action():
         cursor = conn.cursor()
         imm=str(imm)
         imm='{'+imm+'}'
-        st='''SELECT * from public."Action" where \''''+imm+'''\' && "resp" and "D"=False;'''
+        st='''SELECT a."idAct",a."cause",a."action",a."resp",a."datePrevue",a."P",a."D",a."C",a."A",a."idProb",a."nbAct",pa."idPA",pa."nomPA" from public."Action" a ,public."Problem" p,public."Axe" axe,public."PA" pa where \''''+imm+'''\' && a."resp" and a."D"=False and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
         cursor.execute(st)
         result = cursor.fetchall()
         myActions=[]
         for res in result:
-            s=Action()
-            s.idAct=int(res[0])
-            s.cause=res[1]
-            s.action=res[2]
-            s.resp=res[3]
+            s=[]
+            s.append(int(res[0]))
+            s.append(res[1])
+            s.append(res[2])
             q=""
-            for r in s.resp:
+            for r in res[3]:
                 q+=User.FindById(r)+', '
-            s.resp=q[:-2]
-            s.datePrevue=res[4]
-            s.P=res[5]
-            s.D=res[6]
-            s.C=res[7]
-            s.A=res[8]
-            s.idProb=int(res[9])
-            s.nbAct=int(res[10])
+            s.append(q[:-2])
+            s.append(res[4])
+            s.append(res[5])
+            s.append(res[6])
+            s.append(res[7])
+            s.append(res[8])
+            s.append(int(res[9]))
+            s.append(int(res[10]))
+            s.append(int(res[11]))
+            s.append(res[12])
             myActions.append(s)
         conn.close()
         return myActions
@@ -619,27 +663,29 @@ class Action():
         cursor = conn.cursor()
         imm=str(imm)
         imm='{'+imm+'}'
-        st='''SELECT * from public."Action" where "idProb" in (select "idProb" from public."Problem" where "idAxe" in (select "idAxe" from public."Axe" where "idPA" in (select "idPA" from public."PA" where \''''+imm+'''\' && "C"))) and "C"=False ;'''
+        st='''SELECT a."idAct",a."cause",a."action",a."resp",a."datePrevue",a."P",a."D",a."C",a."A",a."idProb",a."nbAct",pa."idPA",pa."nomPA" from public."Action" a ,public."Problem" p,public."Axe" axe,public."PA" pa
+         where a."idProb" in (select "idProb" from public."Problem" where "idAxe" in (select "idAxe" from public."Axe" where "idPA" in (select "idPA" from public."PA" where \''''+imm+'''\' && "C"))) and a."C"=False and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
         cursor.execute(st)
         result = cursor.fetchall()
         myActions=[]
         for res in result:
-            s=Action()
-            s.idAct=int(res[0])
-            s.cause=res[1]
-            s.action=res[2]
-            s.resp=res[3]
+            s=[]
+            s.append(int(res[0]))
+            s.append(res[1])
+            s.append(res[2])
             q=""
-            for r in s.resp:
+            for r in res[3]:
                 q+=User.FindById(r)+', '
-            s.resp=q[:-2]
-            s.datePrevue=res[4]
-            s.P=res[5]
-            s.D=res[6]
-            s.C=res[7]
-            s.A=res[8]
-            s.idProb=int(res[9])
-            s.nbAct=int(res[10])
+            s.append(q[:-2])
+            s.append(res[4])
+            s.append(res[5])
+            s.append(res[6])
+            s.append(res[7])
+            s.append(res[8])
+            s.append(int(res[9]))
+            s.append(int(res[10]))
+            s.append(int(res[11]))
+            s.append(res[12])
             myActions.append(s)
         conn.close()
         return myActions 
@@ -649,27 +695,29 @@ class Action():
         cursor = conn.cursor()
         imm=str(imm)
         imm='{'+imm+'}'
-        st='''SELECT * from public."Action" where "idProb" in (select "idProb" from public."Problem" where "idAxe" in (select "idAxe" from public."Axe" where "idPA" in (select "idPA" from public."PA" where \''''+imm+'''\' && "A"))) and "A"=False ;'''
+        st='''SELECT a."idAct",a."cause",a."action",a."resp",a."datePrevue",a."P",a."D",a."C",a."A",a."idProb",a."nbAct",pa."idPA",pa."nomPA" from public."Action" a ,public."Problem" p,public."Axe" axe,public."PA" pa
+         where a."idProb" in (select "idProb" from public."Problem" where "idAxe" in (select "idAxe" from public."Axe" where "idPA" in (select "idPA" from public."PA" where \''''+imm+'''\' && "A"))) and a."A"=False and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
         cursor.execute(st)
         result = cursor.fetchall()
         myActions=[]
         for res in result:
-            s=Action()
-            s.idAct=int(res[0])
-            s.cause=res[1]
-            s.action=res[2]
-            s.resp=res[3]
+            s=[]
+            s.append(int(res[0]))
+            s.append(res[1])
+            s.append(res[2])
             q=""
-            for r in s.resp:
+            for r in res[3]:
                 q+=User.FindById(r)+', '
-            s.resp=q[:-2]
-            s.datePrevue=res[4]
-            s.P=res[5]
-            s.D=res[6]
-            s.C=res[7]
-            s.A=res[8]
-            s.idProb=int(res[9])
-            s.nbAct=int(res[10])
+            s.append(q[:-2])
+            s.append(res[4])
+            s.append(res[5])
+            s.append(res[6])
+            s.append(res[7])
+            s.append(res[8])
+            s.append(int(res[9]))
+            s.append(int(res[10]))
+            s.append(int(res[11]))
+            s.append(res[12])
             myActions.append(s)
         conn.close()
         return myActions 

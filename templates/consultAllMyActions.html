@@ -14,7 +14,7 @@
     <link href={% static "css/ConsultAllMyActions.css" %} rel="stylesheet" >
     <link rel="shortcut icon" href="../static/images/favicon.ico">
 
-    <title>Plan d'action</title>
+    <title>Mes actions</title>
   </head>
 
   <body>
@@ -25,90 +25,95 @@
         
     <h1>Les Actions à faire</h1>
         <table class="userTab">
-          <tr>
-            <th class="theaderColored"><b>Causes retenus</b></th>
-            <th class="theaderColored"><b>Actions correctives</b></th>
-            <th class="theaderColored"><b>responsable/<br>Signature</b></th>
-            <th class="theaderColored"><b>Date prévue</b></th>
-            <th class="theaderColored" colspan="4"><b>STATUS</b></th>
-            {%if request.session.user.Name == pilote %}
-              <th></th>
-            {%endif%}
-          </tr>
+            <tr>
+                <th class="theaderColored"><b>Causes retenus</b></th>
+                <th class="theaderColored"><b>Actions correctives</b></th>
+                <th class="theaderColored"><b>responsable/<br>Signature</b></th>
+                <th class="theaderColored"><b>Date prévue</b></th>
+                <th class="theaderColored" colspan="4"><b>STATUS</b></th>
+                <th class="theaderColored"><b>PA</b></th>
+              </tr>
                 {%if myActs%}
                     {%for action in myActs%}
                         <tr class="row">
-                            <td class="theader" id="causesRetenues">{{action.cause|safe}}</td>
-                            <td class="theader" id="actionsCorrectives">{{action.action|safe}}</td>
-                            <td class="theader" id="responsable">{{action.resp}}</td>
-                            <td class="theader" id="datePrevue">{{action.datePrevue}}</td>
+                            <td class="theader" id="causesRetenues">{{action.1|safe}}</td>
+                            <td class="theader" id="actionsCorrectives">{{action.2|safe}}</td>
+                            <td class="theader" id="responsable">{{action.3}}</td>
+                            <td class="theader" id="datePrevue">{{action.4}}</td>
                             <td class="ltheader" id="P">
-                                {%if action.P %}
-                                <form action="UpdateP" method="post" id="Pform{{action.idAct}}">
+                                {%if action.5 %}
+                                <form action="UpdateP" method="post" id="Pform{{action.0}}">
                                     {%csrf_token%}
                                     <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                    <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                    <input type="checkbox" name="P" id="P" value="{{action.P}}" checked onclick="setTimeout(Pform(this), 0)" disabled >
+                                    <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                    <input type="checkbox" name="P" id="P" value="{{action.5}}" checked onclick="setTimeout(Pform(this), 0)" disabled >
                                 </form>
                                 {%else%}
-                                <form action="UpdateP" method="post" id="Pform{{action.idAct}}">
+                                <form action="UpdateP" method="post" id="Pform{{action.0}}">
                                     {%csrf_token%}
                                     <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                    <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                    <input type="checkbox" name="P" id="P" value="{{action.P}}" onclick="setTimeout(Pform(this), 0)" disabled>
+                                    <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                    <input type="checkbox" name="P" id="P" value="{{action.5}}" onclick="setTimeout(Pform(this), 0)" disabled>
                                 </form>
                                 {%endif%}
                             </td>
                             <td class="ltheader" id="D">
-                                {%if action.D %}
-                                <form action="UpdateD" method="post" id="Dform{{action.idAct}}">
+                                {%if action.6 %}
+                                <form action="UpdateD" method="post" id="Dform{{action.0}}">
                                     {%csrf_token%}
                                     <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                    <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                    <input type="checkbox" name="D" id="D" value="{{action.D}}" checked onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.resp %} disabled {%endif%}>
+                                    <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                    <input type="checkbox" name="D" id="D" value="{{action.6}}" checked onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
                                 </form>
                                 {%else%}
-                                <form action="UpdateD" method="post" id="Dform{{action.idAct}}">
+                                <form action="UpdateD" method="post" id="Dform{{action.0}}">
                                     {%csrf_token%}
                                     <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                    <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                    <input type="checkbox" name="D" id="D" value="{{action.D}}" onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.resp %} disabled {%endif%}>
+                                    <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                    <input type="checkbox" name="D" id="D" value="{{action.6}}" onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
                                 </form>
                                 {%endif%}
                             </td>
                             <td class="ltheader" id="C">
-                                {%if action.C %}
-                                <form action="UpdateC" method="post" id="Cform{{action.idAct}}">
+                                {%if action.7 %}
+                                <form action="UpdateC" method="post" id="Cform{{action.0}}">
                                     {%csrf_token%}
                                     <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                    <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                    <input type="checkbox" name="C" id="C" value="{{action.C}}" checked onclick="setTimeout(Cform(this), 0)" disabled>
+                                    <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                    <input type="checkbox" name="C" id="C" value="{{action.7}}" checked onclick="setTimeout(Cform(this), 0)" disabled>
                                 </form>
                                 {%else%}
-                                <form action="UpdateC" method="post" id="Cform{{action.idAct}}">
+                                <form action="UpdateC" method="post" id="Cform{{action.0}}">
                                     {%csrf_token%}
                                     <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                    <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                    <input type="checkbox" name="C" id="C" value="{{action.C}}" onclick="setTimeout(Cform(this), 0)" disabled>
+                                    <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                    <input type="checkbox" name="C" id="C" value="{{action.7}}" onclick="setTimeout(Cform(this), 0)" disabled>
                                 </form>
                                 {%endif%}
                             </td>
                             <td class="ltheader" id="A">
-                            {%if action.A %}
-                            <form action="UpdateA" method="post" id="Aform{{action.idAct}}">
+                            {%if action.8 %}
+                            <form action="UpdateA" method="post" id="Aform{{action.0}}">
                                 {%csrf_token%}
                                 <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                <input type="checkbox" name="A" id="A" value="{{action.A}}" checked onclick="setTimeout(Aform(this), 0)" disabled>
+                                <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                <input type="checkbox" name="A" id="A" value="{{action.8}}" checked onclick="setTimeout(Aform(this), 0)" disabled>
                             </form>
                             {%else%}
-                            <form action="UpdateA" method="post" id="Aform{{action.idAct}}">
+                            <form action="UpdateA" method="post" id="Aform{{action.0}}">
                                 {%csrf_token%}
                                 <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                <input type="checkbox" name="A" id="A" value="{{action.A}}" onclick="setTimeout(Aform(this), 0)" disabled>
+                                <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                <input type="checkbox" name="A" id="A" value="{{action.8}}" onclick="setTimeout(Aform(this), 0)" disabled>
                             </form>
                             {%endif%}
+                            </td>
+                            <td >
+                                <form action="Consult" method="post" id="consultForm{{action.0}}" onclick="setTimeout(this.submit(), 0)">
+                                    {% csrf_token%}
+                                    <input type="number" name="idPA" id="idPA"hidden value="{{action.11}}">
+                                    {{action.12|safe}}
+                                </form>
                             </td>
                         </tr>
                     {%endfor%}
@@ -119,194 +124,204 @@
     
     <div class="userTable">
         
-        <h1>Les Actions à checker</h1>
-            <table class="userTab">
-              <tr>
-                <th class="theaderColored"><b>Causes retenus</b></th>
-                <th class="theaderColored"><b>Actions correctives</b></th>
-                <th class="theaderColored"><b>responsable/<br>Signature</b></th>
-                <th class="theaderColored"><b>Date prévue</b></th>
-                <th class="theaderColored" colspan="4"><b>STATUS</b></th>
-                {%if request.session.user.Name == pilote %}
-                  <th></th>
-                {%endif%}
-              </tr>
-                    {%if myCheckerActs%}
-                        {%for action in myCheckerActs%}
-                            <tr class="row">
-                                <td class="theader" id="causesRetenues">{{action.cause|safe}}</td>
-                                <td class="theader" id="actionsCorrectives">{{action.action|safe}}</td>
-                                <td class="theader" id="responsable">{{action.resp}}</td>
-                                <td class="theader" id="datePrevue">{{action.datePrevue}}</td>
-                                <td class="ltheader" id="P">
-                                    {%if action.P %}
-                                    <form action="UpdateP" method="post" id="Pform{{action.idAct}}">
-                                        {%csrf_token%}
-                                        <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                        <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                        <input type="checkbox" name="P" id="P" value="{{action.P}}" checked onclick="setTimeout(Pform(this), 0)" disabled>
-                                    </form>
-                                    {%else%}
-                                    <form action="UpdateP" method="post" id="Pform{{action.idAct}}">
-                                        {%csrf_token%}
-                                        <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                        <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                        <input type="checkbox" name="P" id="P" value="{{action.P}}" onclick="setTimeout(Pform(this), 0)" disabled>
-                                    </form>
-                                    {%endif%}
-                                </td>
-                                <td class="ltheader" id="D">
-                                    {%if action.D %}
-                                    <form action="UpdateD" method="post" id="Dform{{action.idAct}}">
-                                        {%csrf_token%}
-                                        <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                        <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                        <input type="checkbox" name="D" id="D" value="{{action.D}}" checked onclick="setTimeout(Dform(this), 0)" disabled>
-                                    </form>
-                                    {%else%}
-                                    <form action="UpdateD" method="post" id="Dform{{action.idAct}}">
-                                        {%csrf_token%}
-                                        <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                        <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                        <input type="checkbox" name="D" id="D" value="{{action.D}}" onclick="setTimeout(Dform(this), 0)" disabled>
-                                    </form>
-                                    {%endif%}
-                                </td>
-                                <td class="ltheader" id="C">
-                                    {%if action.C %}
-                                    <form action="UpdateC" method="post" id="Cform{{action.idAct}}">
-                                        {%csrf_token%}
-                                        <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                        <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                        <input type="checkbox" name="C" id="C" value="{{action.C}}" checked onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Name  not in pa.C %} disabled {%endif%}>
-                                    </form>
-                                    {%else%}
-                                    <form action="UpdateC" method="post" id="Cform{{action.idAct}}">
-                                        {%csrf_token%}
-                                        <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                        <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                        <input type="checkbox" name="C" id="C" value="{{action.C}}" onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Name  not in pa.C %} disabled {%endif%}>
-                                    </form>
-                                    {%endif%}
-                                </td>
-                                <td class="ltheader" id="A">
-                                {%if action.A %}
-                                <form action="UpdateA" method="post" id="Aform{{action.idAct}}">
-                                    {%csrf_token%}
-                                    <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                    <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                    <input type="checkbox" name="A" id="A" value="{{action.A}}" checked onclick="setTimeout(Aform(this), 0)" disabled>
-                                </form>
-                                {%else%}
-                                <form action="UpdateA" method="post" id="Aform{{action.idAct}}">
-                                    {%csrf_token%}
-                                    <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                    <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                    <input type="checkbox" name="A" id="A" value="{{action.A}}" onclick="setTimeout(Aform(this), 0)" disabled>
-                                </form>
-                                {%endif%}
-                                </td>
-                            </tr>
-                        {%endfor%}
-                    {%endif%}
-                
-            </table>
+        <h1>Les Actions à vérifier</h1>
+        <table class="userTab">
+            <tr>
+              <th class="theaderColored"><b>Causes retenus</b></th>
+              <th class="theaderColored"><b>Actions correctives</b></th>
+              <th class="theaderColored"><b>responsable/<br>Signature</b></th>
+              <th class="theaderColored"><b>Date prévue</b></th>
+              <th class="theaderColored" colspan="4"><b>STATUS</b></th>
+              <th class="theaderColored"><b>PA</b></th>
+            </tr>
+                  {%if myActs%}
+                      {%for action in myCheckerActs%}
+                          <tr class="row">
+                              <td class="theader" id="causesRetenues">{{action.1|safe}}</td>
+                              <td class="theader" id="actionsCorrectives">{{action.2|safe}}</td>
+                              <td class="theader" id="responsable">{{action.3}}</td>
+                              <td class="theader" id="datePrevue">{{action.4}}</td>
+                              <td class="ltheader" id="P">
+                                  {%if action.5 %}
+                                  <form action="UpdateP" method="post" id="Pform{{action.0}}">
+                                      {%csrf_token%}
+                                      <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                      <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                      <input type="checkbox" name="P" id="P" value="{{action.5}}" checked onclick="setTimeout(Pform(this), 0)" disabled >
+                                  </form>
+                                  {%else%}
+                                  <form action="UpdateP" method="post" id="Pform{{action.0}}">
+                                      {%csrf_token%}
+                                      <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                      <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                      <input type="checkbox" name="P" id="P" value="{{action.5}}" onclick="setTimeout(Pform(this), 0)" disabled>
+                                  </form>
+                                  {%endif%}
+                              </td>
+                              <td class="ltheader" id="D">
+                                  {%if action.6 %}
+                                  <form action="UpdateD" method="post" id="Dform{{action.0}}">
+                                      {%csrf_token%}
+                                      <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                      <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                      <input type="checkbox" name="D" id="D" value="{{action.6}}" checked onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
+                                  </form>
+                                  {%else%}
+                                  <form action="UpdateD" method="post" id="Dform{{action.0}}">
+                                      {%csrf_token%}
+                                      <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                      <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                      <input type="checkbox" name="D" id="D" value="{{action.6}}" onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
+                                  </form>
+                                  {%endif%}
+                              </td>
+                              <td class="ltheader" id="C">
+                                  {%if action.7 %}
+                                  <form action="UpdateC" method="post" id="Cform{{action.0}}">
+                                      {%csrf_token%}
+                                      <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                      <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                      <input type="checkbox" name="C" id="C" value="{{action.7}}" checked onclick="setTimeout(Cform(this), 0)" disabled>
+                                  </form>
+                                  {%else%}
+                                  <form action="UpdateC" method="post" id="Cform{{action.0}}">
+                                      {%csrf_token%}
+                                      <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                      <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                      <input type="checkbox" name="C" id="C" value="{{action.7}}" onclick="setTimeout(Cform(this), 0)" disabled>
+                                  </form>
+                                  {%endif%}
+                              </td>
+                              <td class="ltheader" id="A">
+                              {%if action.8 %}
+                              <form action="UpdateA" method="post" id="Aform{{action.0}}">
+                                  {%csrf_token%}
+                                  <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                  <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                  <input type="checkbox" name="A" id="A" value="{{action.8}}" checked onclick="setTimeout(Aform(this), 0)" disabled>
+                              </form>
+                              {%else%}
+                              <form action="UpdateA" method="post" id="Aform{{action.0}}">
+                                  {%csrf_token%}
+                                  <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                  <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                  <input type="checkbox" name="A" id="A" value="{{action.8}}" onclick="setTimeout(Aform(this), 0)" disabled>
+                              </form>
+                              {%endif%}
+                              </td>
+                              <td >
+                                  <form action="Consult" method="post" id="consultForm{{action.0}}" onclick="setTimeout(this.submit(), 0)">
+                                      {% csrf_token%}
+                                      <input type="number" name="idPA" id="idPA"hidden value="{{action.11}}">
+                                      {{action.12|safe}}
+                                  </form>
+                              </td>
+                          </tr>
+                      {%endfor%}
+                  {%endif%}
+              
+          </table>
         </div>
 
         <div class="userTable">
         
-            <h1>Les Actions à Act</h1>
-                <table class="userTab">
-                  <tr>
-                    <th class="theaderColored"><b>Causes retenus</b></th>
-                    <th class="theaderColored"><b>Actions correctives</b></th>
-                    <th class="theaderColored"><b>responsable/<br>Signature</b></th>
-                    <th class="theaderColored"><b>Date prévue</b></th>
-                    <th class="theaderColored" colspan="4"><b>STATUS</b></th>
-                    {%if request.session.user.Name == pilote %}
-                      <th></th>
-                    {%endif%}
-                  </tr>
-                        {%if myActorActs%}
-                            {%for action in myActorActs%}
-                                <tr class="row">
-                                    <td class="theader" id="causesRetenues">{{action.cause|safe}}</td>
-                                    <td class="theader" id="actionsCorrectives">{{action.action|safe}}</td>
-                                    <td class="theader" id="responsable">{{action.resp}}</td>
-                                    <td class="theader" id="datePrevue">{{action.datePrevue}}</td>
-                                    <td class="ltheader" id="P">
-                                        {%if action.P %}
-                                        <form action="UpdateP" method="post" id="Pform{{action.idAct}}">
-                                            {%csrf_token%}
-                                            <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                            <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                            <input type="checkbox" name="P" id="P" value="{{action.P}}" checked onclick="setTimeout(Pform(this), 0)" disabled>
-                                        </form>
-                                        {%else%}
-                                        <form action="UpdateP" method="post" id="Pform{{action.idAct}}">
-                                            {%csrf_token%}
-                                            <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                            <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                            <input type="checkbox" name="P" id="P" value="{{action.P}}" onclick="setTimeout(Pform(this), 0)" disabled>
-                                        </form>
-                                        {%endif%}
-                                    </td>
-                                    <td class="ltheader" id="D">
-                                        {%if action.D %}
-                                        <form action="UpdateD" method="post" id="Dform{{action.idAct}}">
-                                            {%csrf_token%}
-                                            <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                            <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                            <input type="checkbox" name="D" id="D" value="{{action.D}}" checked onclick="setTimeout(Dform(this), 0)" disabled>
-                                        </form>
-                                        {%else%}
-                                        <form action="UpdateD" method="post" id="Dform{{action.idAct}}">
-                                            {%csrf_token%}
-                                            <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                            <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                            <input type="checkbox" name="D" id="D" value="{{action.D}}" onclick="setTimeout(Dform(this), 0)" disabled>
-                                        </form>
-                                        {%endif%}
-                                    </td>
-                                    <td class="ltheader" id="C">
-                                        {%if action.C %}
-                                        <form action="UpdateC" method="post" id="Cform{{action.idAct}}">
-                                            {%csrf_token%}
-                                            <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                            <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                            <input type="checkbox" name="C" id="C" value="{{action.C}}" checked onclick="setTimeout(Cform(this), 0)" disabled>
-                                        </form>
-                                        {%else%}
-                                        <form action="UpdateC" method="post" id="Cform{{action.idAct}}">
-                                            {%csrf_token%}
-                                            <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                            <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                            <input type="checkbox" name="C" id="C" value="{{action.C}}" onclick="setTimeout(Cform(this), 0)" disabled>
-                                        </form>
-                                        {%endif%}
-                                    </td>
-                                    <td class="ltheader" id="A">
-                                    {%if action.A %}
-                                    <form action="UpdateA" method="post" id="Aform{{action.idAct}}">
-                                        {%csrf_token%}
-                                        <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                        <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                        <input type="checkbox" name="A" id="A" value="{{action.A}}" checked onclick="setTimeout(Aform(this), 0)" {%if request.session.user.Name not in pa.A %} disabled {%endif%}>
-                                    </form>
-                                    {%else%}
-                                    <form action="UpdateA" method="post" id="Aform{{action.idAct}}">
-                                        {%csrf_token%}
-                                        <input type="text" name="AllAct" id="AllAct" value="True" hidden>
-                                        <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                                        <input type="checkbox" name="A" id="A" value="{{action.A}}" onclick="setTimeout(Aform(this), 0)" {%if request.session.user.Name not in pa.A %} disabled {%endif%}>
-                                    </form>
-                                    {%endif%}
-                                    </td>
-                                </tr>
-                            {%endfor%}
-                        {%endif%}
-                    
-                </table>
+            <h1>Les Actions à acter</h1>
+            <table class="userTab">
+                <tr>
+                  <th class="theaderColored"><b>Causes retenus</b></th>
+                  <th class="theaderColored"><b>Actions correctives</b></th>
+                  <th class="theaderColored"><b>responsable/<br>Signature</b></th>
+                  <th class="theaderColored"><b>Date prévue</b></th>
+                  <th class="theaderColored" colspan="4"><b>STATUS</b></th>
+                  <th class="theaderColored"><b>PA</b></th>
+                </tr>
+                      {%if myActs%}
+                          {%for action in myActorActs%}
+                              <tr class="row">
+                                  <td class="theader" id="causesRetenues">{{action.1|safe}}</td>
+                                  <td class="theader" id="actionsCorrectives">{{action.2|safe}}</td>
+                                  <td class="theader" id="responsable">{{action.3}}</td>
+                                  <td class="theader" id="datePrevue">{{action.4}}</td>
+                                  <td class="ltheader" id="P">
+                                      {%if action.5 %}
+                                      <form action="UpdateP" method="post" id="Pform{{action.0}}">
+                                          {%csrf_token%}
+                                          <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                          <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                          <input type="checkbox" name="P" id="P" value="{{action.5}}" checked onclick="setTimeout(Pform(this), 0)" disabled >
+                                      </form>
+                                      {%else%}
+                                      <form action="UpdateP" method="post" id="Pform{{action.0}}">
+                                          {%csrf_token%}
+                                          <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                          <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                          <input type="checkbox" name="P" id="P" value="{{action.5}}" onclick="setTimeout(Pform(this), 0)" disabled>
+                                      </form>
+                                      {%endif%}
+                                  </td>
+                                  <td class="ltheader" id="D">
+                                      {%if action.6 %}
+                                      <form action="UpdateD" method="post" id="Dform{{action.0}}">
+                                          {%csrf_token%}
+                                          <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                          <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                          <input type="checkbox" name="D" id="D" value="{{action.6}}" checked onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
+                                      </form>
+                                      {%else%}
+                                      <form action="UpdateD" method="post" id="Dform{{action.0}}">
+                                          {%csrf_token%}
+                                          <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                          <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                          <input type="checkbox" name="D" id="D" value="{{action.6}}" onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
+                                      </form>
+                                      {%endif%}
+                                  </td>
+                                  <td class="ltheader" id="C">
+                                      {%if action.7 %}
+                                      <form action="UpdateC" method="post" id="Cform{{action.0}}">
+                                          {%csrf_token%}
+                                          <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                          <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                          <input type="checkbox" name="C" id="C" value="{{action.7}}" checked onclick="setTimeout(Cform(this), 0)" disabled>
+                                      </form>
+                                      {%else%}
+                                      <form action="UpdateC" method="post" id="Cform{{action.0}}">
+                                          {%csrf_token%}
+                                          <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                          <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                          <input type="checkbox" name="C" id="C" value="{{action.7}}" onclick="setTimeout(Cform(this), 0)" disabled>
+                                      </form>
+                                      {%endif%}
+                                  </td>
+                                  <td class="ltheader" id="A">
+                                  {%if action.8 %}
+                                  <form action="UpdateA" method="post" id="Aform{{action.0}}">
+                                      {%csrf_token%}
+                                      <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                      <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                      <input type="checkbox" name="A" id="A" value="{{action.8}}" checked onclick="setTimeout(Aform(this), 0)" disabled>
+                                  </form>
+                                  {%else%}
+                                  <form action="UpdateA" method="post" id="Aform{{action.0}}">
+                                      {%csrf_token%}
+                                      <input type="text" name="AllAct" id="AllAct" value="True" hidden>
+                                      <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
+                                      <input type="checkbox" name="A" id="A" value="{{action.8}}" onclick="setTimeout(Aform(this), 0)" disabled>
+                                  </form>
+                                  {%endif%}
+                                  </td>
+                                  <td >
+                                      <form action="Consult" method="post" id="consultForm{{action.0}}" onclick="setTimeout(this.submit(), 0)">
+                                          {% csrf_token%}
+                                          <input type="number" name="idPA" id="idPA"hidden value="{{action.11}}">
+                                          {{action.12|safe}}
+                                      </form>
+                                  </td>
+                              </tr>
+                          {%endfor%}
+                      {%endif%}
+                  
+              </table>
             </div>
 
     <script src="{% static "js/UpdatePDCA.js" %}"></script>

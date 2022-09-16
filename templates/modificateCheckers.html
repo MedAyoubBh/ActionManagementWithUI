@@ -11,7 +11,7 @@
     <link href={% static "css/modificateCheckers.css" %} rel="stylesheet" >
     <link rel="shortcut icon" href="../static/images/favicon.ico">
 
-    <title>modifier checkers</title>
+    <title>Modifier vérificateurs</title>
       
   </head>
 
@@ -21,7 +21,7 @@
       <form action="ModificateCheckers" name="ModificateCheckers" method="post" style="display:grid ;">
         {% csrf_token%}
         <input  type="number" name="idPA1" id="idPA1" hidden value="{{pa.idPA}}">
-        <label>Sélectionner les checkers :</label>
+        <label>Sélectionner les vérificateurs :</label>
         {%for user in users%}
         <div class="theNumber">
           {{user}}

@@ -22,6 +22,16 @@
         Consulter mes actions
       </a>
     </form>
+
+    <form action="ConsultAllMyPA" name="myform3" method="post">
+      {% csrf_token%}
+      <a
+        href="ConsultAllMyPA"
+        onclick="setTimeout(function() { document.myform3.submit() }, 0)"
+      >
+        Consulter mes plans d'actions
+      </a>
+    </form>
     
     <form action="Consult" name="myform" method="post">
       {% csrf_token%}
@@ -73,9 +83,9 @@
       </form>
   
     {%endif%}
-    <a href="Logout">Logout</a>
+    <a href="Logout">Déconnecter</a>
     {%else%}
-    <a href="Login">Login</a>
+    <a href="Login">Connecter</a>
     {%endif%}
   
 </nav>

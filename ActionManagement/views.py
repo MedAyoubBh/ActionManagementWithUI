@@ -150,17 +150,26 @@ def consult(request):
         parts=""
         if pa.participants is not None:
             for i in pa.participants:
-                parts+=model.User.FindById(i)+','
+                try:
+                    parts+=model.User.FindById(i)+','
+                except:
+                    parts=parts
             parts = parts[:-1]
         Cs=""
         if pa.C is not None:
             for i in pa.C:
-                Cs+=model.User.FindById(i)+','
+                try:
+                    Cs+=model.User.FindById(i)+','
+                except:
+                    Cs=Cs
             Cs = Cs[:-1]
         As=""
         if pa.A is not None:
             for i in pa.A:
-                As+=model.User.FindById(i)+','
+                try:
+                    As+=model.User.FindById(i)+','
+                except:
+                    As=As
             As = As[:-1]
         pilote=model.User.FindById(pa.piloteImm)
         axes = model.Axe.Find_All_By_idPA(pa.idPA)
@@ -1044,3 +1053,11 @@ def outputReformat(text):
     text=text.split("''")
     text="'".join(text)
     return text
+
+def consultAllMyPA(request):
+    if request.method == 'POST':
+        myPAs=model.PA.getAllMyPA(request.session["user"]["Immatricule"])
+        dict={"myPAs":myPAs}
+        return render(request,'consultAllMyPA.html',dict)
+    else:
+        return redirect('home')

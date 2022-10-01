@@ -18,13 +18,18 @@
 
   <body>
     {%include 'navbar.html'%}
-   
-      
-        <h1 class="sousTitre">Tableau de bord pour le(s) PA(s) : </h1>
-        {%for sect in sects%}
-          <h4 class="sousTitre liItem"><small>{{sect|safe}}</small></h4>
-        {%endfor%}
-     
+      <div class="DivSousTitre">
+        <div>
+          <h1 class="sousTitre1">Tableau de bord pour le(s) PA(s) : </h1>
+          {%for sect in sects%}
+            <h4 class="sousTitre1 liItem1"><small>{{sect|safe}}</small></h4>
+          {%endfor%}
+        </div>
+        <form  action="DashboardForm" method="post">
+          {%csrf_token%}
+          <input class="DashboardForm" type="submit" value="Filtrer">
+        </form>
+      </div>
       {%if resps %}
           <h1 class="sousTitre">Pour le(s) responsable(s) : </h1>
           {%for resp in resps%}
@@ -36,7 +41,7 @@
   
     
     <div class="userTable">
-      <h1 class="sousTitre tableTiltle">Table TRA </h1>
+      <h1 class="sousTitre tableTiltle">Table TRA, TRAT et TCA</h1>
       <table class="userTab">
         <tr>
           <th>PA</th>
@@ -46,12 +51,16 @@
           <th>Trimestre 4</th>
           <th>Moyenne</th>
         </tr>
-        {% for sect,tra in TRA %}
+        {% for sect,t in TRA %}
           <tr>
-            <td>{{sect|safe}}</td>
-            {% for t in tra %}
-              <td>{{t}}</td>
-            {%endfor%}
+            <td><h4>{{sect|safe}}</h4> <h5>TRA</h5> <h5>TRAT</h5>  <h5>TCA</h5> </td>
+            {% for tr,tt,tc in t %}
+              {%if tr == "Pas d'actions planifiées dans cette période!" or tr == "En dehors de la période donnée!" or tr == "Pas de moyenne!"%}
+                <td>{{tr}}</td>
+              {%else%}
+                <td><br> <br>{{tr}} <br> <br> {{tt}}<br> <br>{{tc}}</td>
+              {%endif%}
+            {%endfor%} 
           </tr>
         {%endfor%}
       </table> 
@@ -59,63 +68,16 @@
 
     <br>
 
-    <div class="userTable">
-      <h1 class="sousTitre tableTiltle">Table TRAT </h1>
-      <table class="userTab">
-        <tr>
-          <th>PA</th>
-          <th>Trimetre 1</th>
-          <th>Trimetre 2</th>
-          <th>Trimetre 3</th>
-          <th>Trimetre 4</th>
-          <th>Moyenne</th>
-        </tr>
-        {% for sect,trat in TRAT %}
-          <tr>
-            <td>{{sect|safe}}</td>
-            {% for t in trat %}
-              <td>{{t}}</td>
-            {%endfor%}
-          </tr>
-        {%endfor%}
-      </table> 
-    </div>
-
-    <br>
-
-    <div class="userTable">
-      <h1 class="sousTitre tableTiltle">Table TCA </h1>
-      <table class="userTab">
-        <tr>
-          <th>PA</th>
-          <th>Trimetre 1</th>
-          <th>Trimetre 2</th>
-          <th>Trimetre 3</th>
-          <th>Trimetre 4</th>
-          <th>Moyenne</th>
-        </tr>
-        {% for sect,tca in TCA %}
-          <tr>
-            <td>{{sect|safe}}</td>
-            {% for t in tca %}
-              <td>{{t}}</td>
-            {%endfor%}
-          </tr>
-        {%endfor%}
-      </table> 
-    </div>
-
-    <br>
 
 <div class="userTable">
     <script src="http://yui.yahooapis.com/3.10.0/build/yui/yui-min.js"></script>
     <h1 class="sousTitre">TRA et TRAT par PA</h1>
     {{ chart1.as_html }}
-    <h3 class="statistic ">Moyen TRA = {{TRAMoyen}}%</h3>
-    <h3 class="statistic">Moyen TRAT = {{TRATMoyen}}%</h3>
-    <h1 class=" sousTitre">TCA par PA</h1>
+    <h3 class="statistic ">Moyen TRA = {{TRAMoyen}}</h3>
+    <h3 class="statistic">Moyen TRAT = {{TRATMoyen}}</h3>
+    <h1 class=" sousTitre">TCA par Trimestre</h1>
     {{ chart.as_html }}
-    <h3 class="statistic">Moyen TCA = {{TCAMoyen}}%</h3>
+    <h3 class="statistic">Moyen TCA = {{TCAMoyen}}</h3>
   </div>
   </body>
 </html>

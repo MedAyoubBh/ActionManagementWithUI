@@ -164,14 +164,14 @@
                                       {%csrf_token%}
                                       <input type="text" name="AllAct" id="AllAct" value="True" hidden>
                                       <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
-                                      <input type="checkbox" name="D" id="D" value="{{action.6}}" checked onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
+                                      <input type="checkbox" name="D" id="D" value="{{action.6}}" checked onclick="setTimeout(Dform(this), 0)" disabled>
                                   </form>
                                   {%else%}
                                   <form action="UpdateD" method="post" id="Dform{{action.0}}">
                                       {%csrf_token%}
                                       <input type="text" name="AllAct" id="AllAct" value="True" hidden>
                                       <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
-                                      <input type="checkbox" name="D" id="D" value="{{action.6}}" onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
+                                      <input type="checkbox" name="D" id="D" value="{{action.6}}" onclick="setTimeout(Dform(this), 0)" disabled>
                                   </form>
                                   {%endif%}
                               </td>
@@ -181,14 +181,14 @@
                                       {%csrf_token%}
                                       <input type="text" name="AllAct" id="AllAct" value="True" hidden>
                                       <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
-                                      <input type="checkbox" name="C" id="C" value="{{action.7}}" checked onclick="setTimeout(Cform(this), 0)" disabled>
+                                      <input type="checkbox" name="C" id="C" value="{{action.7}}" checked onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
                                   </form>
                                   {%else%}
                                   <form action="UpdateC" method="post" id="Cform{{action.0}}">
                                       {%csrf_token%}
                                       <input type="text" name="AllAct" id="AllAct" value="True" hidden>
                                       <input type="number" name="idAct" id="idAct" value="{{action.0}}" hidden>
-                                      <input type="checkbox" name="C" id="C" value="{{action.7}}" onclick="setTimeout(Cform(this), 0)" disabled>
+                                      <input type="checkbox" name="C" id="C" value="{{action.7}}" onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Name not in action.3 %} disabled {%endif%}>
                                   </form>
                                   {%endif%}
                               </td>

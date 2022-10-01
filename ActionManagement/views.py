@@ -903,7 +903,7 @@ def dashboard(request):
                                 allAP+=ap
                                 sum+=(ar/ap)*100
                                 count+=1
-                                T.append((ar/ap)*100)
+                                T.append(str(round((ar/ap)*100,2))+'%')
                     if allap!=0:
                         TRAall.append((allar/allap)*100)
                     else:
@@ -911,12 +911,12 @@ def dashboard(request):
                     if count==0:
                         T.append("Pas de moyenne!")
                     else:
-                        T.append(sum/count)
+                        T.append(str(round(sum/count,2))+'%')
                     TRA.append(T)
         if allAP!=0:
-            TRAMoyen=(allAR/allAP)*100
+            TRAMoyen=str(round((allAR/allAP)*100,2))+'%'
         else:
-            TRAMoyen=0
+            TRAMoyen=str(round(0,2))+'%'
         #Taux de réalisation d'action à temps
         TRAT=[]
         TRATall=[] 
@@ -941,7 +941,7 @@ def dashboard(request):
                                 allAP+=ap
                                 sum+=(art/ap)*100
                                 count+=1
-                                T.append((art/ap)*100)
+                                T.append(str(round((art/ap)*100,2))+'%')
                     if allap!=0:
                         TRATall.append((allart/allap)*100)
                     else:
@@ -949,10 +949,10 @@ def dashboard(request):
                     if count==0:
                         T.append("Pas de moyenne!")
                     else:
-                        T.append(sum/count)
+                        T.append(str(round(sum/count,2))+'%')
                     TRAT.append(T)
         if allAP!=0:
-            TRATMoyen=(allART/allAP)*100
+            TRATMoyen=str(round((allART/allAP)*100,2))+'%'
         else:
             TRATMoyen=0
         #Taux de cloturation d'action
@@ -974,11 +974,11 @@ def dashboard(request):
                                 t[1]+=ap
                                 sum+=(ac/ap)*100
                                 count+=1
-                                T.append((ac/ap)*100)
+                                T.append(str(round((ac/ap)*100,2))+'%')
                     if count==0:
                         T.append("Pas de moyenne!")
                     else:
-                        T.append(sum/count)
+                        T.append(str(round(sum/count,2))+'%')
                     TCA.append(T)
 
         
@@ -998,7 +998,11 @@ def dashboard(request):
         else:
             TCAMoyen=0
 
-        TRA=zip(sects,TRA)
+        tab=[]
+        for i,j,k,l in zip(sects,TRA,TRAT,TCA):
+            tab.append([i,zip(j,k,l)])
+       
+        TRA=zip(tab)
         TRAT=zip(sects,TRAT)
         TCA=zip(sects,TCA)
 
@@ -1016,7 +1020,7 @@ def dashboard(request):
         # DataSource object
         data_source = SimpleDataSource(data=data)
         chart= BarChart(data_source)
-        dict={"TRA":TRA,"TRAT":TRAT,"TCA":TCA,"sects":sects,"resps":resps,"chart":chart,"chart1":i1i2,"TRAMoyen":TRAMoyen,"TRATMoyen":TRATMoyen,"TCAMoyen":TCAMoyen}
+        dict={"TRA":tab,"TRAT":TRAT,"TCA":TCA,"sects":sects,"resps":resps,"chart":chart,"chart1":i1i2,"TRAMoyen":TRAMoyen,"TRATMoyen":TRATMoyen,"TCAMoyen":TCAMoyen}
         return render(request,'dashboard.html',dict)
     else:
         return redirect('home')

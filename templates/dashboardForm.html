@@ -24,7 +24,7 @@
       <div class="Dashboard">
         <form action="Dashboard" name="Dashboard" method="POST" enctype="multipart/form-data" style="display:grid ;">
             {% csrf_token %}
-                <label for="nbAct">Filtrer par PA : </label>
+                <label for="secteurs">Filtrer par PA : </label>
                 <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
                     <option value="tous" selected>Tous</option>
                     {%for sect in sects%}
@@ -32,19 +32,19 @@
                     {%endfor%}
                 </select>
                 <div class="filterByTime">
-                    <label for="">Filtrer par temps : </label>
+                    <label for="periode">Filtrer par temps : </label>
                     <br>
-                    <input class="check top" type="checkbox" name="periode" value="periode" id="periode" onclick="show()">  Période
+                    <input class="check top" type="checkbox" name="periode" id="periode" onclick="show(this)">Période
                 </div>
                 <div class="timeInterval" id="timeInterval" hidden>
-                    <label for="datePrevue">Date de début : </label>
+                    <label for="dateDebut">Date de début : </label>
                     <input type="date" name="dateDebut" id="dateDebut"><br>
-                    <label for="datePrevue">Date de fin : </label>
+                    <label for="dateFin">Date de fin : </label>
                     <input type="date" name="dateFin" id="dateFin">
                 </div>
-                <label for="">Filtrer par responsable(s) : </label>
+                <label for="tousResp">Filtrer par responsable(s) : </label>
                 <div class="allResp">
-                    <input class="check" type="checkbox" name="tousResp" value="tousResp" id="tousResp" checked onclick="selectAll()">Tous
+                    <input class="check" type="checkbox" name="tousResp" value="tousResp" id="tousResp" checked onclick="selectAll(this)">Tous
                 </div>
                 <div class="resp" id="resp" hidden>
                     {%for resp in resps%}
@@ -54,6 +54,6 @@
                 <input class="btn" type="submit" value="Filtrer" id="Filtrer">
         </form>
       </div>
-      <script src="{% static "js/Dform.js" %}"></script>
+      <script src="{% static "js/DForm.js" %}"></script>
   </body>
 </html>

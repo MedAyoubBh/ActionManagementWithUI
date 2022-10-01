@@ -77,10 +77,15 @@
       </a>
     </form>
   
-    <form action="DashboardForm" name="DashboardForm" method="post">
+    <form action="Dashboard" name="Dashboard" method="post">
       {% csrf_token%}
-      <a href="DashboardForm" onclick="setTimeout(function() { document.DashboardForm.submit() }, 0)">Tableau de bord</a>
-      </form>
+      <a href="Dashboard" onclick="setTimeout(function() { document.Dashboard.submit() }, 0)">Tableau de bord</a>
+      <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" hidden>
+        <option value="tous" selected>Tous</option>
+      </select>
+      <input class="check top" type="checkbox" name="periode" value="periode" id="periode" hidden>
+      <input class="check" type="checkbox" name="tousResp" value="tousResp" id="tousResp" checked hidden>
+    </form>
   
     {%endif%}
     <a href="Logout">Déconnecter</a>

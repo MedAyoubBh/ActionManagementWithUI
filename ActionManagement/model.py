@@ -632,7 +632,7 @@ class Action():
         cursor = conn.cursor()
         imm=str(imm)
         imm='{'+imm+'}'
-        st='''SELECT a."idAct",a."cause",a."action",a."resp",a."datePrevue",a."P",a."D",a."C",a."A",a."idProb",a."nbAct",pa."idPA",pa."nomPA" from public."Action" a ,public."Problem" p,public."Axe" axe,public."PA" pa where \''''+imm+'''\' && a."resp" and a."D"=False and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
+        st='''SELECT a."idAct",a."cause",a."action",a."resp",a."datePrevue",a."P",a."D",a."C",a."A",a."idProb",a."nbAct",pa."idPA",pa."nomPA" from public."Action" a ,public."Problem" p,public."Axe" axe,public."PA" pa where \''''+imm+'''\' && a."resp" and a."D"=False and a."P"=True and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
         cursor.execute(st)
         result = cursor.fetchall()
         myActions=[]
@@ -664,7 +664,7 @@ class Action():
         imm=str(imm)
         imm='{'+imm+'}'
         st='''SELECT a."idAct",a."cause",a."action",a."resp",a."datePrevue",a."P",a."D",a."C",a."A",a."idProb",a."nbAct",pa."idPA",pa."nomPA" from public."Action" a ,public."Problem" p,public."Axe" axe,public."PA" pa
-         where a."idProb" in (select "idProb" from public."Problem" where "idAxe" in (select "idAxe" from public."Axe" where "idPA" in (select "idPA" from public."PA" where \''''+imm+'''\' && "C"))) and a."C"=False and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
+         where a."idProb" in (select "idProb" from public."Problem" where "idAxe" in (select "idAxe" from public."Axe" where "idPA" in (select "idPA" from public."PA" where \''''+imm+'''\' && "C"))) and a."D"=True and a."C"=False and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
         cursor.execute(st)
         result = cursor.fetchall()
         myActions=[]
@@ -696,7 +696,7 @@ class Action():
         imm=str(imm)
         imm='{'+imm+'}'
         st='''SELECT a."idAct",a."cause",a."action",a."resp",a."datePrevue",a."P",a."D",a."C",a."A",a."idProb",a."nbAct",pa."idPA",pa."nomPA" from public."Action" a ,public."Problem" p,public."Axe" axe,public."PA" pa
-         where a."idProb" in (select "idProb" from public."Problem" where "idAxe" in (select "idAxe" from public."Axe" where "idPA" in (select "idPA" from public."PA" where \''''+imm+'''\' && "A"))) and a."A"=False and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
+         where a."idProb" in (select "idProb" from public."Problem" where "idAxe" in (select "idAxe" from public."Axe" where "idPA" in (select "idPA" from public."PA" where \''''+imm+'''\' && "A"))) and a."C"=True and a."A"=False and a."idProb"=p."idProb" and p."idAxe"=axe."idAxe" and axe."idPA"=pa."idPA";'''
         cursor.execute(st)
         result = cursor.fetchall()
         myActions=[]

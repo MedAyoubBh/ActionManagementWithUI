@@ -1165,3 +1165,49 @@ def historic(request):
         return render(request,'Historic.html',dict)
     else:
         return redirect('home')
+
+def printPA(request):
+    if request.method == 'POST' and (request.POST.get("idPA",False)):
+        idPA=request.POST["idPA"]
+        respFilter="tous"
+        pa=model.PA.Find_By_idPA(str(idPA))
+        parts=""
+        if pa.participants is not None:
+            for i in pa.participants:
+                try:
+                    parts+=model.User.FindById(i)+','
+                except:
+                    parts=parts
+            parts = parts[:-1]
+        Cs=""
+        if pa.C is not None:
+            for i in pa.C:
+                try:
+                    Cs+=model.User.FindById(i)+','
+                except:
+                    Cs=Cs
+            Cs = Cs[:-1]
+        As=""
+        if pa.A is not None:
+            for i in pa.A:
+                try:
+                    As+=model.User.FindById(i)+','
+                except:
+                    As=As
+            As = As[:-1]
+        pilote=model.User.FindById(pa.piloteImm)
+        axes = model.Axe.Find_All_By_idPA(pa.idPA)
+        axeAndProbAndActions=[]
+        for axe in axes:
+            probs=model.Problem.Find_All_By_idAxe(axe.idAxe)
+            probAndActions=[]
+            sums=0
+            for prob in probs:
+                actions=model.Action.Find_All_By_idProb(prob.idProb)
+                sums+=len(actions)
+                probAndActions.append([prob,len(actions)+2,len(actions)+1,actions])
+            axeAndProbAndActions.append([axe,len(probs)+sums+2,probAndActions])
+        dict={"pa":pa,"parts":parts,"pilote":pilote,"axeAndProbAndActions":axeAndProbAndActions,"Cs":Cs,"As":As,"respFilter":respFilter}
+        return render(request,'printPA.html',dict)
+    else:
+        return redirect('home')

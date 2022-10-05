@@ -18,7 +18,6 @@
   </head>
 
   <body>
-    {%include 'navbar.html'%}
 
 
     <div class="userTable">
@@ -60,13 +59,6 @@
                       {%for part in parts%}
                       {{part}} 
                     {%endfor%}
-                    {%if request.session.user.Name == pilote %}
-                      <form action="ModificateParticipants" class="ModificateParticipants" name="ModificateParticipants" method="post">
-                        {%csrf_token%}
-                        <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                        <img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png" onclick="setTimeout(function() { document.ModificateParticipants.submit() }, 0)">
-                      </form>
-                    {%endif%}
                     </td>
                   </tr>
                   <tr>
@@ -74,25 +66,11 @@
                         {%for C in Cs%}
                           {{C}} 
                         {%endfor%}
-                        {%if request.session.user.Name == pilote %}
-                          <form action="ModificateCheckers" class="ModificateCheckers" name="ModificateCheckers" method="post">
-                            {%csrf_token%}
-                            <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                            <img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png" onclick="setTimeout(function() { document.ModificateCheckers.submit() }, 0)">
-                          </form>
-                        {%endif%}
                     </td>
                     <td class="pilote"><b>Acteurs : </b>
                       {%for A in As%}
                           {{A}} 
                         {%endfor%}
-                        {%if request.session.user.Name == pilote %}
-                          <form action="ModificateActors" class="ModificateActors" name="ModificateActors" method="post">
-                            {%csrf_token%}
-                            <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                            <img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png" onclick="setTimeout(function() { document.ModificateActors.submit() }, 0)">
-                          </form>
-                        {%endif%}
                     </td>
             
                   </tr>
@@ -120,7 +98,7 @@
                     <form action="rev" method="post" id="nbRevform1" name="nbRevform1">
                       {%csrf_token%}
                       <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="checkbox" name="rev1" id="rev1" onclick="setTimeout(function() { document.nbRevform1.submit() }, 0)" {%if request.session.user.Name not in pa.C and request.session.user.Name not in pa.A %} disabled {%endif%} >
+                      <input type="checkbox" name="rev1" id="rev1" disabled>
                     </form>
                   </td>
                   <td class="revDone"><input type="checkbox" name="rev2" id="rev2"  disabled></td>
@@ -132,7 +110,7 @@
                     <form action="rev" method="post" id="nbRevform1" name="nbRevform2">
                       {%csrf_token%}
                       <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="checkbox" name="rev2" id="rev2" onclick="setTimeout(function() { document.nbRevform2.submit() }, 0)" {%if request.session.user.Name not in pa.C and request.session.user.Name not in pa.A %} disabled {%endif%} >
+                      <input type="checkbox" name="rev2" id="rev2" disabled >
                     </form>
                   </td>
                   <td class="revDone"><input type="checkbox" name="rev3" id="rev3" disabled></td>
@@ -144,7 +122,7 @@
                     <form action="rev" method="post" id="nbRevform3" name="nbRevform3">
                       {%csrf_token%}
                       <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="checkbox" name="rev3" id="rev3" onclick="setTimeout(function() { document.nbRevform3.submit() }, 0)" {%if request.session.user.Name not in pa.C and request.session.user.Name not in pa.A %} disabled {%endif%} >
+                      <input type="checkbox" name="rev3" id="rev3" disabled >
                     </form>
                   </td>
                   <td class="revDone"><input type="checkbox" name="rev4" id="rev4" disabled></td>
@@ -156,7 +134,7 @@
                     <form action="rev" method="post" id="nbRevform4" name="nbRevform4">
                       {%csrf_token%}
                       <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="checkbox" name="rev4" id="rev4" onclick="setTimeout(function() { document.nbRevform4.submit() }, 0)" {%if request.session.user.Name  not in pa.C and request.session.user.Name not in pa.A %} disabled {%endif%} >
+                      <input type="checkbox" name="rev4" id="rev4" disabled>
                     </form>
                   </td>
                   {%elif pa.nbRev == 4 %}
@@ -166,17 +144,6 @@
                   <td class="revDone"><input type="checkbox" name="rev4" id="rev4" checked disabled></td>
                   {%endif%}
                 </tr>
-                {%if messages%}
-                  <tr>
-                    <td colspan="4" class="pourcentage&alerts">
-                      {% for message in messages %}
-                        <div class="alert alert-dismissible alert-success">
-                          <strong>{{message}}</strong>
-                        </div>
-                      {% endfor %}
-                    </td>
-                  </tr>
-                {%endif%}
               </table>
             </td>
           </tr>
@@ -186,29 +153,6 @@
     <div class="tableHeader">
       <p><h3 class="sousTitre">(*)CR : criticité (1:critique  2:modéré  3:non critique)</h3></p>
     </div>
-
-    <div class="respFilter" style="display:inline ;">
-      <form action="Consult" id="respFilterForm" name="respFilterForm" method="post" enctype="multipart/form-data" style="display:flexbox ;">
-        {%csrf_token%}
-        <input type="text" name="sects" id="sects" value="{{pa.nomPA|safe}}" hidden>
-        <input type="number" name="nbPA" id="nbPA" value="{{pa.nbPA}}" hidden>
-        <input type="number" name="pagePA" id="pagePA" value="{{pa.pagePA}}" hidden>
-        <label for="nbPA"><b>Filtrer les actions par : </b></label>
-        <select class="disabledNumber" name="respFilter" id="respFilter" spellcheck="true" onchange="setTimeout(function() { document.respFilterForm.submit() }, 0)">            
-          <option   value="tous" {%if respFilter == "tous"%}selected{%endif%}>toutes</option>
-          <option value="miennes" {%if respFilter == "miennes"%}selected{%endif%}>miennes</option>
-        </select>
-      </form>
-
-      <form action="PrintPA" id="printPAForm" name="respFilterForm" method="post" enctype="multipart/form-data" style="display:flexbox ;margin-left: 87%;">
-        {%csrf_token%}
-        <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-        <input type="submit" value="Imprimer ce PA" style="height: 60px;width: 120px;">
-      </form>
-
-    </div>
-
-    <br>
       
     <div class="userTable">
         <table class="userTab">
@@ -221,9 +165,6 @@
             <th class="theaderColored"><b>responsable/<br>Signature</b></th>
             <th class="theaderColored"><b>Date prévue</b></th>
             <th class="theaderColored" colspan="4"><b>STATUS</b></th>
-            {%if request.session.user.Name == pilote %}
-              <th></th>
-            {%endif%}
           </tr>
             {%if axeAndProbAndActions%}
             {%for aPAA in axeAndProbAndActions%}
@@ -231,14 +172,6 @@
                 <td class="axeNumber">{{aPAA.0.nbAxe}}</td>
                 <td class="probDomain">
                   <b>{{aPAA.0.indicateur|safe}}</b>
-                  {%if request.session.user.Name == pilote %}
-                    <form action="ModificateAxe" class="ModificateAxe" name="ModificateAxe" method="post">
-                      {%csrf_token%}
-                      <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="number" name="idAxe" id="idAxe" value="{{aPAA.0.idAxe}}" hidden>
-                      <button type="submit"><img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png"/></button>
-                    </form>
-                  {%endif%}
                 </td>
                 <td class="vide1" colspan="9"></td>
               </tr>
@@ -248,25 +181,9 @@
                   <td class="probNumber" rowspan="{{pAA.1}}">{{aPAA.0.nbAxe}}-{{pAA.0.nbProb}}</td>
                   <td class="probDescription" rowspan="{{pAA.1}}">
                     {{pAA.0.descriptionProb|safe}}
-                    {%if request.session.user.Name == pilote %}
-                      <form action="ModificateProblem" class="ModificateProblem" name="ModificateProblem1" method="post">
-                        {%csrf_token%}
-                        <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                        <input type="number" name="idProb" id="idProb" value="{{pAA.0.idProb}}" hidden>
-                        <button type="submit"><img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png"/></button>
-                      </form>
-                    {%endif%}
                   </td>
                   <td class="ltheader" id="cr" rowspan="{{pAA.1}}">
                     {{pAA.0.cr}}
-                    {%if request.session.user.Name == pilote %}
-                      <form action="ModificateProblem" class="ModificateProblem" name="ModificateProblem2" method="post">
-                        {%csrf_token%}
-                        <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                        <input type="number" name="idProb" id="idProb" value="{{pAA.0.idProb}}" hidden>
-                        <button type="submit"><img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png"/></button>
-                      </form>
-                    {%endif%}
                   </td>
                 </tr>
                 {%if pAA.3%}
@@ -282,14 +199,14 @@
                             {%csrf_token%}
                             <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                             <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <input type="checkbox" name="P" id="P" value="{{action.P}}" checked onclick="setTimeout(Pform(this), 0)" {%if request.session.user.Name != pilote %} disabled {%endif%} >
+                            <input type="checkbox" name="P" id="P" value="{{action.P}}" checked disabled >
                           </form>
                         {%else%}
                           <form action="UpdateP" method="post" id="Pform{{action.idAct}}">
                             {%csrf_token%}
                             <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                             <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <input type="checkbox" name="P" id="P" value="{{action.P}}" onclick="setTimeout(Pform(this), 0)" {%if request.session.user.Name != pilote %} disabled {%endif%}>
+                            <input type="checkbox" name="P" id="P" value="{{action.P}}" disabled >
                           </form>
                         {%endif%}
                       </td>
@@ -299,14 +216,14 @@
                             {%csrf_token%}
                             <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                             <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <input type="checkbox" name="D" id="D" value="{{action.D}}" checked onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.resp %} disabled {%endif%}>
+                            <input type="checkbox" name="D" id="D" value="{{action.D}}" checked disabled >
                           </form>
                         {%else%}
                           <form action="UpdateD" method="post" id="Dform{{action.idAct}}">
                             {%csrf_token%}
                             <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                             <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <input type="checkbox" name="D" id="D" value="{{action.D}}" onclick="setTimeout(Dform(this), 0)" {%if request.session.user.Name not in action.resp %} disabled {%endif%}>
+                            <input type="checkbox" name="D" id="D" value="{{action.D}}" disabled >
                           </form>
                         {%endif%}
                       </td>
@@ -316,14 +233,14 @@
                             {%csrf_token%}
                             <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                             <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <input type="checkbox" name="C" id="C" value="{{action.C}}" checked onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Name  not in pa.C %} disabled {%endif%}>
+                            <input type="checkbox" name="C" id="C" value="{{action.C}}" checked disabled >
                           </form>
                         {%else%}
                           <form action="UpdateC" method="post" id="Cform{{action.idAct}}">
                             {%csrf_token%}
                             <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                             <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <input type="checkbox" name="C" id="C" value="{{action.C}}" onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Name  not in pa.C %} disabled {%endif%}>
+                            <input type="checkbox" name="C" id="C" value="{{action.C}}" disabled >
                           </form>
                         {%endif%}
                       </td>
@@ -333,68 +250,28 @@
                         {%csrf_token%}
                         <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                         <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                        <input type="checkbox" name="A" id="A" value="{{action.A}}" checked onclick="setTimeout(Aform(this), 0)" {%if request.session.user.Name not in pa.A %} disabled {%endif%}>
+                        <input type="checkbox" name="A" id="A" value="{{action.A}}" checked disabled >
                       </form>
                     {%else%}
                       <form action="UpdateA" method="post" id="Aform{{action.idAct}}">
                         {%csrf_token%}
                         <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                         <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                        <input type="checkbox" name="A" id="A" value="{{action.A}}" onclick="setTimeout(Aform(this), 0)" {%if request.session.user.Name not in pa.A %} disabled {%endif%}>
+                        <input type="checkbox" name="A" id="A" value="{{action.A}}" disabled >
                       </form>
                     {%endif%}
                       </td>
-                      {%if request.session.user.Name == pilote %}
-                        <td>
-                          <form action="ModificateAction" class="ModificateAction" name="ModificateAction{{action.idAct}}" id="ModificateAction{{action.idAct}}" method="post">
-                            {%csrf_token%}
-                            <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                            <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <button type="submit"><img class="modificate" src="https://img.icons8.com/pastel-glyph/64/000000/edit--v1.png"/></button>
-                          </form>
-                        </td>
-                      {%endif%}
                     </tr>
                   {%endfor%}
                 {%endif%}
-                <tr>
-                  <td class="addAction" colspan="9">
-                    <form action="CreateAction" method="post">
-                      {%csrf_token%}
-                      <input type="number" name="idProb" value="{{pAA.0.idProb}}" hidden>
-                      <input type="number" name="idPA" value="{{pa.idPA}}" hidden>
-                      <input class="btn" type="submit" value="Ajouter une Action" {%if request.session.user.Name != pilote %} hidden {%endif%}>
-                    </form>
-                </td>
-                </tr>
+
               {%endfor%}
             {%endif%}
-            <tr>
-              <td colspan="9">
-                <form action="CreateProblem" method="post">
-                  {%csrf_token%}
-                    <input type="number" name="idPA" value="{{pa.idPA}}" hidden>
-                    <input type="number" name="idAxe" value="{{aPAA.0.idAxe}}" hidden>
-                    <input class="btn" type="submit" value="Ajouter nouveau Problème" {%if request.session.user.Name != pilote %} hidden {%endif%}>
-                </form>
-              </td>
-            </tr>
             
           {%endfor%}
           {%endif%}
         </table>
     </div>
-    
-    <form action="CreateAxe" method="post">
-      {%csrf_token%}
-        <input type="number" name="idPA" value="{{pa.idPA}}" hidden>
-        <input class="btn" type="submit" value="Ajouter nouveau Axe de Problèmes" {%if request.session.user.Name != pilote %} hidden {%endif%}>
-    </form>
-    <form action="AddPage" method="post">
-      {%csrf_token%}
-        <input type="number" name="idPA" value="{{pa.idPA}}" hidden>
-        <input class="btn" type="submit" value="Ajouter une page" {%if request.session.user.Name != pilote %} hidden {%endif%}>
-    </form>
     
     <script src="{% static "js/UpdatePDCA.js" %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

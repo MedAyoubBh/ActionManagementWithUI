@@ -1058,7 +1058,6 @@ def dashboard(request):
         else:
             TCAMoyen=str(round(0,2))+'%'
 
-        print(tt)
         TCATrim=[]
         allAC=0
         allAP=0

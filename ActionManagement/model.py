@@ -6,6 +6,18 @@ import psycopg2
 class Secteur():
     nameSec = models.CharField(max_length=250)
 
+    def Find_All_Sects():
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        str='SELECT * from public."Secteur" order by "nameSec" asc;'
+        cursor.execute(str)
+        result = cursor.fetchall()
+        conn.close()
+        all = []
+        for name in result:
+            all.append(name)
+        return all
+
     def insert(new):
         conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
         cursor = conn.cursor()
@@ -56,18 +68,6 @@ class Secteur():
 
     def __str__(self) :
         return self.nameSec
-    
-    def Find_All_Sects():
-        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
-        cursor = conn.cursor()
-        str='SELECT * from public."Secteur" order by "nameSec" ASC;'
-        cursor.execute(str)
-        result = cursor.fetchall()
-        conn.close()
-        all = []
-        for name in result:
-            all.append(name)
-        return all
 
     def __str__(self) :
         return self.nameSec
@@ -86,6 +86,1531 @@ class PA():
     nbRev = 0
     C = []
     A = []
+
+    def getAllCompletedPA():
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        st='''SELECT pa."idPA",pa."nomPA",pa."nbPA",pa."pagePA",pa."datePA",pa."piloteImm",pa."secteurPA",pa."participants",pa."dateRev",pa."nbRev",pa."C",pa."A" from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and act."A" = \''''+str(True)+'''\' ;'''
+        cursor.execute(st)
+        result = cursor.fetchall()
+        completedPA=[]
+        for res in result:
+            s = PA()
+            s.idPA=res[0]
+            s.nomPA=res[1]
+            s.nbPA=res[2]
+            s.pagePA=res[3]
+            s.datePA=res[4]
+            s.piloteImm=res[5]
+            s.secteurPA=res[6]
+            s.participants=res[7]
+            q=""
+            for r in s.participants:
+                try:
+                    q+=User.FindById(r)+', '
+                except:
+                    q=q
+            s.participants=q[:-2]
+            s.dateRev=res[8]
+            s.nbRev=res[9]
+            s.C=res[10]
+            q=""
+            if s.C!=None:
+                for r in s.C:
+                    try:
+                        q+=User.FindById(r)+', '
+                    except:
+                        q=q
+                s.C=q[:-2]
+            s.A=res[11]
+            q=""
+            if s.A!=None:
+                for r in s.A:
+                    try:
+                        q+=User.FindById(r)+', '
+                    except:
+                        q=q
+                s.A=q[:-2]
+            completedPA.append(s)
+        conn.close()
+        return completedPA
+    
+    def getAllCompletedPA():
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        st='''SELECT pa."idPA",pa."nomPA",pa."nbPA",pa."pagePA",pa."datePA",pa."piloteImm",pa."secteurPA",pa."participants",pa."dateRev",pa."nbRev",pa."C",pa."A" from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and act."A" = \''''+str(True)+'''\' order By pa."idPA" asc;'''
+        cursor.execute(st)
+        result = cursor.fetchall()
+        completedPA=[]
+        for res in result:
+            s = PA()
+            s.idPA=res[0]
+            s.nomPA=res[1]
+            s.nbPA=res[2]
+            s.pagePA=res[3]
+            s.datePA=res[4]
+            s.piloteImm=res[5]
+            s.secteurPA=res[6]
+            s.participants=res[7]
+            q=""
+            for r in s.participants:
+                try:
+                    q+=User.FindById(r)+', '
+                except:
+                    q=q
+            s.participants=q[:-2]
+            s.dateRev=res[8]
+            s.nbRev=res[9]
+            s.C=res[10]
+            q=""
+            if s.C!=None:
+                for r in s.C:
+                    try:
+                        q+=User.FindById(r)+', '
+                    except:
+                        q=q
+                s.C=q[:-2]
+            s.A=res[11]
+            q=""
+            if s.A!=None:
+                for r in s.A:
+                    try:
+                        q+=User.FindById(r)+', '
+                    except:
+                        q=q
+                s.A=q[:-2]
+            completedPA.append(s)
+        conn.close()
+        return completedPA
+    
+    def getAllUncompletedPA():
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        st='''SELECT pa."idPA",pa."nomPA",pa."nbPA",pa."pagePA",pa."datePA",pa."piloteImm",pa."secteurPA",pa."participants",pa."dateRev",pa."nbRev",pa."C",pa."A" from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and act."A" = \''''+str(False)+'''\' order By pa."idPA" asc;'''
+        cursor.execute(st)
+        result = cursor.fetchall()
+        uncompletedPA=[]
+        for res in result:
+            s = PA()
+            s.idPA=res[0]
+            s.nomPA=res[1]
+            s.nbPA=res[2]
+            s.pagePA=res[3]
+            s.datePA=res[4]
+            s.piloteImm=res[5]
+            s.secteurPA=res[6]
+            s.participants=res[7]
+            q=""
+            for r in s.participants:
+                try:
+                    q+=User.FindById(r)+', '
+                except:
+                    q=q
+            s.participants=q[:-2]
+            s.dateRev=res[8]
+            s.nbRev=res[9]
+            s.C=res[10]
+            q=""
+            if s.C!=None:
+                for r in s.C:
+                    try:
+                        q+=User.FindById(r)+', '
+                    except:
+                        q=q
+                s.C=q[:-2]
+            s.A=res[11]
+            q=""
+            if s.A!=None:
+                for r in s.A:
+                    try:
+                        q+=User.FindById(r)+', '
+                    except:
+                        q=q
+                s.A=q[:-2]
+            uncompletedPA.append(s)
+        conn.close()
+        return uncompletedPA
+
+    def Find_All_Sects():
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        str='SELECT distinct("secteurPA") from public."PA" order by "secteurPA" asc;'
+        cursor.execute(str)
+        result = cursor.fetchall()
+        conn.close()
+        all = []
+        for name in result:
+            all.append(name)
+        print(all)
+        return all
+
+    def getAllPA(dateDeb,dateFin):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+        for sect in Secteur.Find_All_Secters():
+            #st='''SELECT count(idPA) from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and act."P" = \''''+str(True)+'''\' ;'''
+            result=[]
+            if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(idPA) from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and act."P" = \''''+str(True)+'''\';'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\';'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+            else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+            finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getCompletedPA(dateDeb,dateFin):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+        for sect in Secteur.Find_All_Secters():
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+            result=[]
+            if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\';'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+            else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+            finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getUncompletedPA(dateDeb,dateFin):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+        for sect in Secteur.Find_All_Secters():
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+            result=[]
+            if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\';'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+            else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+            finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getAllPABySecter(dateDeb,dateFin,sect):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+            #st='''SELECT count(idPA) from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and act."P" = \''''+str(True)+'''\' ;'''
+        result=[]
+        if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\';'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+        else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count("idPA") from public."PA" pa WHERE pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+        finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getCompletedPABySecter(dateDeb,dateFin,sect):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+        result=[]
+        if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\';'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+        else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+        finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getUncompletedPABySecter(dateDeb,dateFin,sect):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+        result=[]
+        if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\';'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+        else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\';'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\';'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\';'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+        finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getAllPAByResps(dateDeb,dateFin,resp):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        resp=str(resp)
+        resp=resp.replace('[','{')
+        resp=resp.replace(']','}')
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+        for sect in Secteur.Find_All_Secters():
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and act."P" = \''''+str(True)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+            result=[]
+            if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and act."P" = \''''+str(True)+'''\' and \''''+resp+'''\' && act."resp"  ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+            else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+            finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getCompletedPAByResps(dateDeb,dateFin,resp):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        resp=str(resp)
+        resp=resp.replace('[','{')
+        resp=resp.replace(']','}')
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+        for sect in Secteur.Find_All_Secters():
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+            result=[]
+            if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+            else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+            finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getUncompletedPAByResps(dateDeb,dateFin,resp):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        resp=str(resp)
+        resp=resp.replace('[','{')
+        resp=resp.replace(']','}')
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+        for sect in Secteur.Find_All_Secters():
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+            result=[]
+            if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+            else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+            finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getAllPABySecterByResps(dateDeb,dateFin,sect,resp):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        resp=str(resp)
+        resp=resp.replace('[','{')
+        resp=resp.replace(']','}')
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and act."P" = \''''+str(True)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+        result=[]
+        if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and act."P" = \''''+str(True)+'''\' and \''''+resp+'''\' && act."resp"  ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+        else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa ,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and  pa."secteurPA" = \''''+str(sect)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+        finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getCompletedPABySecterByResps(dateDeb,dateFin,sect,resp):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        resp=str(resp)
+        resp=resp.replace('[','{')
+        resp=resp.replace(']','}')
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+        result=[]
+        if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+        else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(True)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+        finalResult.append(result)
+        conn.close()
+        return finalResult
+
+    def getUncompletedPABySecterByResps(dateDeb,dateFin,sect,resp):
+        conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
+        cursor = conn.cursor()
+        resp=str(resp)
+        resp=resp.replace('[','{')
+        resp=resp.replace(']','}')
+        finalResult=[]
+        dateDeb=datetime.datetime.strptime(dateDeb, '%Y-%m-%d').date()
+        dateFin=datetime.datetime.strptime(dateFin, '%Y-%m-%d').date()
+            #st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' ;'''
+        result=[]
+        if datetime.datetime.strptime(str(dateDeb.year)+"-1-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-3-31", '%Y-%m-%d').date():
+                if datetime.datetime.strptime(str(dateFin.year)+"-1-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date():
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    result.append(None)
+                    result.append(None)
+                    result.append(None)
+                else:
+                    st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(dateDeb)+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-3-31", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                    cursor.execute(st)
+                    res = cursor.fetchone()
+                    result.append(res[0])
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+        else:
+                result.append(None)
+                if datetime.datetime.strptime(str(dateDeb.year)+"-4-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-6-30", '%Y-%m-%d').date():
+                    if datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date():
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        result.append(None)
+                        result.append(None)
+                    else:
+                        st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-4-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-6-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                        cursor.execute(st)
+                        res = cursor.fetchone()
+                        result.append(res[0])
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-1", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                else:
+                    result.append(None)
+                    if datetime.datetime.strptime(str(dateDeb.year)+"-7-1", '%Y-%m-%d').date()<=dateDeb<=datetime.datetime.strptime(str(dateDeb.year)+"-9-30", '%Y-%m-%d').date():
+                        if datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date():
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            result.append(None)
+                        else:
+                            st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-7-1", '%Y-%m-%d').date())+'''\' and \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-9-30", '%Y-%m-%d').date())+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                            cursor.execute(st)
+                            res = cursor.fetchone()
+                            result.append(res[0])
+                            if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+                    else:
+                        result.append(None)
+                        if datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date()<=dateFin<=datetime.datetime.strptime(str(dateFin.year)+"-12-31", '%Y-%m-%d').date():
+                                st='''SELECT count(pa."idPA") from public."PA" pa,public."Axe" axe,public."Problem" pr,public."Action" act WHERE pa."idPA"=axe."idPA" and axe."idAxe"=pr."idAxe" and pr."idProb"=act."idProb" and pa."secteurPA" = \''''+str(sect)+'''\' and act."A" = \''''+str(False)+'''\' and pa."datePA" between \''''+str(datetime.datetime.strptime(str(dateFin.year)+"-10-1", '%Y-%m-%d').date())+'''\' and \''''+str(dateFin)+'''\' and \''''+resp+'''\' && act."resp" ;'''
+                                cursor.execute(st)
+                                res = cursor.fetchone()
+                                result.append(res[0])
+
+        finalResult.append(result)
+        conn.close()
+        return finalResult
 
     def getAllMyPA(imm):
         conn = psycopg2.connect(database="ActionManagement", user='postgres', password='root', host='127.0.0.1', port= '5432')
@@ -116,20 +1641,22 @@ class PA():
             s.nbRev=res[9]
             s.C=res[10]
             q=""
-            for r in s.C:
-                try:
-                    q+=User.FindById(r)+', '
-                except:
-                    q=q
-            s.C=q[:-2]
+            if s.C!=None:
+                for r in s.C:
+                    try:
+                        q+=User.FindById(r)+', '
+                    except:
+                        q=q
+                s.C=q[:-2]
             s.A=res[11]
             q=""
-            for r in s.A:
-                try:
-                    q+=User.FindById(r)+', '
-                except:
-                    q=q
-            s.A=q[:-2]
+            if s.A!=None:
+                for r in s.A:
+                    try:
+                        q+=User.FindById(r)+', '
+                    except:
+                        q=q
+                s.A=q[:-2]
             myPA.append(s)
         conn.close()
         return myPA
@@ -313,7 +1840,6 @@ class PA():
 
     def __str__(self) :
         return self.nomPA
-
 
 
 class User():

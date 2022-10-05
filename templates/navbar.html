@@ -11,7 +11,7 @@
 </div>
 
 
-    {%if request.session.user %} {%if request.session.noPA == False %}
+  {%if request.session.user %} {%if request.session.noPA == False %}
 
     <form action="ConsultAllMyActions" name="myform2" method="post">
       {% csrf_token%}
@@ -76,7 +76,19 @@
         Consulter Secteurs
       </a>
     </form>
-  
+    {%endif%}
+
+    <form action="Historic" name="Historic" method="post">
+      {% csrf_token%}
+      <a
+        href="Historic"
+        onclick="setTimeout(function() { document.Historic.submit() }, 0)"
+      >
+        Historique PA
+      </a>
+    </form>
+    
+    {% if request.session.user.Immatricule == 3 %}
     <form action="Dashboard" name="Dashboard" method="post">
       {% csrf_token%}
       <a href="Dashboard" onclick="setTimeout(function() { document.Dashboard.submit() }, 0)">Tableau de bord</a>

@@ -19,12 +19,8 @@
 <body>
   {%include "navbar.html"%}
   <h1 class="sousTitre">Consutler Plan d'Actions</h1>
-  {%if error%}
-  <div class="error">
-    <h1 style="color: red">{{error}}</h1>
-  </div>
-
-  {%endif%} {%if pagePA%}
+  
+  {%if pagePA%}
 
   <div class="Consult">
     <form class="Cform" action="Consult" method="POST" enctype="multipart/form-data" style="display: grid">
@@ -87,7 +83,7 @@
       <label for="secteurs">Sélectionner le secteur du plan d'action</label>
       <select class="disabledNumber" name="secteurs" id="secteurs" spellcheck="true" required>
         {%for sect in sects%}
-        <option value="{{sect.nameSec.0|safe}}">{{sect.nameSec.0|safe}}</option>
+        <option value="{{sect.0|safe}}">{{sect.0|safe}}</option>
         {%endfor%}
       </select>
       <input class="btn" type="submit" value="Confirm" />

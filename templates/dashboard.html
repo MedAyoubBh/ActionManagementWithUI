@@ -53,12 +53,12 @@
         </tr>
         {% for sect,t in TRA %}
           <tr>
-            <td><h4>{{sect|safe}}</h4> <h5>TRA</h5> <h5>TRAT</h5>  <h5>TCA</h5> </td>
-            {% for tr,tt,tc in t %}
+            <td><h4>{{sect|safe}}</h4> <h5>TRA</h5> <h5>TRAT</h5>  <h5>TCA</h5> <h5>nombre total de PA</h5> <h5>PA effectué</h5> <h5>PA à réaliser</h5> </td>
+            {% for tr,tt,tc,nbAllPA,nbCompletedPA,nbUncompletedPA in t %}
               {%if tr == "Pas d'actions planifiées dans cette période!" or tr == "En dehors de la période donnée!" or tr == "Pas de moyenne!"%}
                 <td>{{tr}}</td>
               {%else%}
-                <td><br> <br>{{tr}} <br> <br> {{tt}}<br> <br>{{tc}}</td>
+                <td><br> <br>{{tr}} <br> <br> {{tt}}<br> <br>{{tc}}<br> <br>{{nbAllPA}}<br> <br>{{nbCompletedPA}}<br> <br>{{nbUncompletedPA}}</td>
               {%endif%}
             {%endfor%} 
           </tr>
@@ -71,13 +71,13 @@
 
 <div class="userTable">
     <script src="http://yui.yahooapis.com/3.10.0/build/yui/yui-min.js"></script>
-    <h1 class="sousTitre">TRA et TRAT par PA</h1>
+    <h1 class="sousTitre">TRA(<img src="{% static "images/violet.png" %}" style="width:30px; height:20px;" />), TRAT(<img src="{% static "images/brown.png" %}" style="width:30px; height:20px;" />) et TCA(<img src="{% static "images/green.png" %}" style="width:30px; height:20px;" />) par PA</h1>
     {{ chart1.as_html }}
-    <h3 class="statistic ">Moyen TRA = {{TRAMoyen}}</h3>
-    <h3 class="statistic">Moyen TRAT = {{TRATMoyen}}</h3>
-    <h1 class=" sousTitre">TCA par Trimestre</h1>
+    <h3 class="statistic ">Moyen TRA = {{TRAMoyen}}<br>Moyen TRAT = {{TRATMoyen}}<br>Moyen TCA = {{TCAMoyen}}</h3>
+    
+    <h1 class=" sousTitre">TRA(<img src="{% static "images/violet.png" %}" style="width:30px; height:20px;" />), TRAT(<img src="{% static "images/brown.png" %}" style="width:30px; height:20px;" />) et TCA(<img src="{% static "images/green.png" %}" style="width:30px; height:20px;" />) par Trimestre</h1>
     {{ chart.as_html }}
-    <h3 class="statistic">Moyen TCA = {{TCAMoyen}}</h3>
+    <h3 class="statistic">Moyen TRA = {{TRATrimMoyen}}<br>Moyen TRAT = {{TRATTrimMoyen}}<br>Moyen TCA = {{TCATrimMoyen}}</h3>
   </div>
   </body>
 </html>

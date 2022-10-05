@@ -54,5 +54,6 @@ urlpatterns = [
     path('ModificateActors',views.modificateActors,name='modificateActors'),
     path('ConsultAllMyActions',views.consultAllMyActions,name='consultAllMyActions'),
     path('ConsultAllMyPA',views.consultAllMyPA,name='consultAllMyPA'),
+    path('Historic',views.historic,name='historic'),
     re_path (r'^.*$', RedirectView.as_view (url='/', permanent=False), name='home')
 ]

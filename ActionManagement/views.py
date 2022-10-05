@@ -201,12 +201,18 @@ def consult(request):
         Cs=""
         if pa.C is not None:
             for i in pa.C:
-                Cs+=model.User.FindById(i)+','
+                try:
+                    Cs+=model.User.FindById(i)+','
+                except:
+                    Cs=Cs
             Cs = Cs[:-1]
         As=""
         if pa.A is not None:
             for i in pa.A:
-                As+=model.User.FindById(i)+','
+                try:
+                    As+=model.User.FindById(i)+','
+                except:
+                    As=As
             As = As[:-1]
         pilote=model.User.FindById(pa.piloteImm)
         axes = model.Axe.Find_All_By_idPA(pa.idPA)
@@ -244,14 +250,14 @@ def consult(request):
             lastNbPA=lastNbPA[0]+1
         except:
             err="Pas de PA dans ce secteur! Sélectionner un autre secteur ou créer un PA"
-            sects = model.Secteur.Find_All()
+            sects = model.PA.Find_All_Sects()
             return render(request,'ConsultForm.html',{"sects":sects,"error":err})
         NbPA=[]
         for i in range(1,lastNbPA):
             NbPA.append(i)
         return render(request,'ConsultForm.html',{"sect":nomPA,"NbPA":NbPA})
     elif request.method == 'POST':
-        sects = model.Secteur.Find_All()
+        sects = model.PA.Find_All_Sects()
         return render(request,'ConsultForm.html',{"sects":sects})
     else:
         return redirect('home')
@@ -431,12 +437,13 @@ def updateA(request):
                 dict={"idPA":idPA}
                 return render(request,"created.html",dict)
             elif act.C==True and A==True:
-                messages.success(request,'Action unacted successfully!')
+                model.Action.Update_A(idAct,A)
+                messages.success(request,'Action acted successfully!')
                 dict={"idPA":idPA}
                 return render(request,"created.html",dict)
             else:
+                messages.success(request,'Action unacted successfully!')
                 model.Action.Update_A(idAct,A)
-                messages.success(request,'Action acted successfully!')
                 dict={"idPA":idPA}
                 return render(request,"created.html",dict)
         elif request.POST.get("AllAct",False):
@@ -826,7 +833,7 @@ def dashboard(request):
         sect=request.POST["secteurs"]
         period=request.POST.get("periode",False)
         allResp=request.POST.get("tousResp",False)
-        #setting strat and end of period
+        #setting start and end of period
         if period:
             dateDeb=request.POST["dateDebut"]
             dateFin=request.POST["dateFin"]
@@ -845,6 +852,9 @@ def dashboard(request):
                 nbART=model.Action.getAllDoneAtTime(dateDeb,dateFin)
                 nbAC=model.Action.getAllClustered(dateDeb,dateFin)
                 sects=model.Secteur.Find_All_Secters()
+                nbAllPA=model.PA.getAllPA(dateDeb,dateFin)
+                nbCompletedPA=model.PA.getCompletedPA(dateDeb,dateFin)
+                nbUncompletedPA=model.PA.getUncompletedPA(dateDeb,dateFin)
                 resps=False
             #Some Secters
             else:
@@ -854,6 +864,9 @@ def dashboard(request):
                 nbART=model.Action.getAllDoneAtTimeBySecter(dateDeb,dateFin,sect)
                 nbAC=model.Action.getAllClusteredBySecter(dateDeb,dateFin,sect)
                 sects=[sect]
+                nbAllPA=model.PA.getAllPABySecter(dateDeb,dateFin,sect)
+                nbCompletedPA=model.PA.getCompletedPABySecter(dateDeb,dateFin,sect)
+                nbUncompletedPA=model.PA.getUncompletedPABySecter(dateDeb,dateFin,sect)
                 resps=False
         #some Responsables
         else:
@@ -870,6 +883,9 @@ def dashboard(request):
                 nbAR=model.Action.getAllDoneByResps(dateDeb,dateFin,resp)
                 nbART=model.Action.getAllDoneAtTimeByResps(dateDeb,dateFin,resp)
                 nbAC=model.Action.getAllClusteredByResps(dateDeb,dateFin,resp)
+                nbAllPA=model.PA.getAllPAByResps(dateDeb,dateFin,resp)
+                nbCompletedPA=model.PA.getCompletedPAByResps(dateDeb,dateFin,resp)
+                nbUncompletedPA=model.PA.getUncompletedPAByResps(dateDeb,dateFin,resp)
                 sects=model.Secteur.Find_All_Secters()
             #Some Secters
             else:
@@ -878,25 +894,32 @@ def dashboard(request):
                 nbAR=model.Action.getAllDoneBySecterByResps(dateDeb,dateFin,sect,resp)
                 nbART=model.Action.getAllDoneAtTimeBySecterByResps(dateDeb,dateFin,sect,resp)
                 nbAC=model.Action.getAllClusteredBySecterByResps(dateDeb,dateFin,sect,resp)
+                nbAllPA=model.PA.getAllPABySecterByResps(dateDeb,dateFin,sect,resp)
+                nbCompletedPA=model.PA.getCompletedPABySecterByResps(dateDeb,dateFin,sect,resp)
+                nbUncompletedPA=model.PA.getUncompletedPABySecterByResps(dateDeb,dateFin,sect,resp)
                 sects=[sect]
         #Taux de réalisation d'action
         TRA=[]
         TRAall=[] 
         allAR=0
-        allAP=0   
+        allAP=0
+        t1ac,t1ap,t2ac,t2ap,t3ac,t3ap,t4ac,t4ap=0,0,0,0,0,0,0,0    
+        tt=[[t1ac,t1ap],[t2ac,t2ap],[t3ac,t3ap],[t4ac,t4ap]]   
         for nbar,nbap in zip(nbAR,nbAP):
                     sum=0
                     count=0
                     allar=0
                     allap=0
                     T=[]
-                    for ar,ap in zip(nbar,nbap):
+                    for ar,ap,t in zip(nbar,nbap,tt):
                         if(ap==None):
                             T.append("En dehors de la période donnée!")
                         elif (ap==0):
                             T.append("Pas d'actions planifiées dans cette période!")
                         else:
                             if ar!=None:
+                                t[0]+=ar
+                                t[1]+=ap
                                 allar+=ar
                                 allAR+=ar
                                 allap+=ap
@@ -917,24 +940,44 @@ def dashboard(request):
             TRAMoyen=str(round((allAR/allAP)*100,2))+'%'
         else:
             TRAMoyen=str(round(0,2))+'%'
+        
+        TRATrim=[]
+        allART=0
+        allAP=0
+        for t in tt:
+            allAR+=t[0]
+            allAP+=t[1]
+            if t[1]!=0:
+                TRATrim.append((t[0]/t[1])*100)
+            else:
+                TRATrim.append(0)
+        som=0
+        for t in TRATrim:
+            som+=t
+        TRATrimMoyen=str(round((som/4),2))+'%'
+
         #Taux de réalisation d'action à temps
         TRAT=[]
         TRATall=[] 
         allART=0
         allAP=0
+        t1ac,t1ap,t2ac,t2ap,t3ac,t3ap,t4ac,t4ap=0,0,0,0,0,0,0,0    
+        tt=[[t1ac,t1ap],[t2ac,t2ap],[t3ac,t3ap],[t4ac,t4ap]]
         for nbart,nbap in zip(nbART,nbAP):
                     sum=0
                     count=0
                     allart=0
                     allap=0
                     T=[]
-                    for art,ap in zip(nbart,nbap):
+                    for art,ap,t in zip(nbart,nbap,tt):
                         if(ap==None):
                             T.append("En dehors de la période donnée!")
                         elif (ap==0):
                             T.append("Pas d'actions planifiées dans cette période!")
                         else:
                             if art!=None:
+                                t[0]+=art
+                                t[1]+=ap
                                 allart+=art
                                 allART+=art
                                 allap+=ap
@@ -954,14 +997,36 @@ def dashboard(request):
         if allAP!=0:
             TRATMoyen=str(round((allART/allAP)*100,2))+'%'
         else:
-            TRATMoyen=0
+            TRATMoyen=str(round(0,2))+'%'
+
+        TRATTrim=[]
+        allART=0
+        allAP=0
+        for t in tt:
+            allART+=t[0]
+            allAP+=t[1]
+            if t[1]!=0:
+                TRATTrim.append((t[0]/t[1])*100)
+            else:
+                TRATTrim.append(0)
+        som=0
+        for t in TRATTrim:
+            som+=t
+        TRATTrimMoyen=str(round((som/4),2))+'%'
+
         #Taux de cloturation d'action
         TCA=[]  
+        TCAall=[]
+        allAC=0
+        allAP=0
         t1ac,t1ap,t2ac,t2ap,t3ac,t3ap,t4ac,t4ap=0,0,0,0,0,0,0,0    
         tt=[[t1ac,t1ap],[t2ac,t2ap],[t3ac,t3ap],[t4ac,t4ap]]  
+        
         for nbac,nbap in zip(nbAC,nbAP):
                     sum=0
                     count=0
+                    allac=0
+                    allap=0
                     T=[]
                     for ac,ap,t in zip(nbac,nbap,tt):
                         if(ap==None):
@@ -972,16 +1037,28 @@ def dashboard(request):
                             if ac!=None:
                                 t[0]+=ac
                                 t[1]+=ap
+                                allAC+=ac
+                                allAP+=ap
+                                allac+=ac
+                                allap+=ap
                                 sum+=(ac/ap)*100
                                 count+=1
                                 T.append(str(round((ac/ap)*100,2))+'%')
+                    if allap!=0:
+                        TCAall.append((allac/allap)*100)
+                    else:
+                        TCAall.append(0)
                     if count==0:
                         T.append("Pas de moyenne!")
                     else:
                         T.append(str(round(sum/count,2))+'%')
                     TCA.append(T)
+        if allAP!=0:
+            TCAMoyen=str(round((allAC/allAP)*100,2))+'%'
+        else:
+            TCAMoyen=str(round(0,2))+'%'
 
-        
+        print(tt)
         TCATrim=[]
         allAC=0
         allAP=0
@@ -992,35 +1069,49 @@ def dashboard(request):
                 TCATrim.append((t[0]/t[1])*100)
             else:
                 TCATrim.append(0)
+        som=0
+        for t in TCATrim:
+            som+=t
+        TCATrimMoyen=str(round((som/4),2))+'%'
 
-        if allAP!=0:
-            TCAMoyen=(allAC/allAP)*100
-        else:
-            TCAMoyen=0
+        nbAllPAM=[]
+        for n in nbAllPA:
+            nbAllPAM.append([n[0],n[1],n[2],n[3],'-'])
+        
+        nbAllPA=nbAllPAM
+
+        nbCompletedPAM=[]
+        for n in nbCompletedPA:
+            nbCompletedPAM.append([n[0],n[1],n[2],n[3],'-'])
+
+        nbCompletedPA=nbCompletedPAM
+
+        nbUncompletedPAM=[]
+        for n in nbCompletedPA:
+            nbUncompletedPAM.append([n[0],n[1],n[2],n[3],'-'])
+
+        nbUncompletedPA=nbUncompletedPAM
 
         tab=[]
-        for i,j,k,l in zip(sects,TRA,TRAT,TCA):
-            tab.append([i,zip(j,k,l)])
+        for i,j,k,l,m,n,o in zip(sects,TRA,TRAT,TCA,nbAllPA,nbCompletedPA,nbUncompletedPA):
+            tab.append([i,zip(j,k,l,m,n,o)])
        
-        TRA=zip(tab)
-        TRAT=zip(sects,TRAT)
-        TCA=zip(sects,TCA)
 
-        data = [['PA','TRA','TRAT']]
-        for x,y,z in  zip(sects,TRAall,TRATall):
-            data.append([x,y,z])
+        data = [['PA','TRA','TRAT','TCA']]
+        for x,y,z,i in  zip(sects,TRAall,TRATall,TCAall):
+            data.append([x,y,z,i])
         # DataSource object
         data_source = SimpleDataSource(data=data)
         # Chart object
         i1i2 = BarChart(data_source)
-        data = [['Trim','TCA']]
+        data = [['Trim','TRA','TRAT','TCA']]
         trim=['T1','T2','T3','T4']
-        for x,y in  zip(trim,TCATrim):
-            data.append([x,y])
+        for x,y,z,t in  zip(trim,TRATrim,TRATTrim,TCATrim):
+            data.append([x,y,z,t])
         # DataSource object
         data_source = SimpleDataSource(data=data)
         chart= BarChart(data_source)
-        dict={"TRA":tab,"TRAT":TRAT,"TCA":TCA,"sects":sects,"resps":resps,"chart":chart,"chart1":i1i2,"TRAMoyen":TRAMoyen,"TRATMoyen":TRATMoyen,"TCAMoyen":TCAMoyen}
+        dict={"TRA":tab,"sects":sects,"resps":resps,"chart":chart,"chart1":i1i2,"TRAMoyen":TRAMoyen,"TRATMoyen":TRATMoyen,"TCAMoyen":TCAMoyen,"TCATrimMoyen":TCATrimMoyen,"TRATTrimMoyen":TRATTrimMoyen,"TRATrimMoyen":TRATrimMoyen}
         return render(request,'dashboard.html',dict)
     else:
         return redirect('home')
@@ -1063,5 +1154,14 @@ def consultAllMyPA(request):
         myPAs=model.PA.getAllMyPA(request.session["user"]["Immatricule"])
         dict={"myPAs":myPAs}
         return render(request,'consultAllMyPA.html',dict)
+    else:
+        return redirect('home')
+
+def historic(request):
+    if request.method == 'POST':
+        completedPA=model.PA.getAllCompletedPA()
+        uncompletedPA=model.PA.getAllUncompletedPA()
+        dict={"completedPA":completedPA,"uncompletedPA":uncompletedPA}
+        return render(request,'Historic.html',dict)
     else:
         return redirect('home')

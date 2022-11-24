@@ -457,11 +457,12 @@ def updateA(request):
                 messages.error(request,'Can\'t Act not checked action!')
                 return render(request,'UpdatedRedirectToConsultAll.html')
             elif act.C==True and A==True:
-                messages.success(request,'Action unacted successfully!')
+                model.Action.Update_A(idAct,A)
+                messages.success(request,'Action acted successfully!')
                 return render(request,'UpdatedRedirectToConsultAll.html')
             else:
                 model.Action.Update_A(idAct,A)
-                messages.success(request,'Action acted successfully!')                
+                messages.success(request,'Action unacted successfully!')                
                 return render(request,'UpdatedRedirectToConsultAll.html')
     else:
         return redirect('home')
@@ -575,7 +576,7 @@ def modificateAxe(request):
         axe=model.Axe.Find_By_idAxe(idAxe)
         axe.indicateur=outputReformat(axe.indicateur)
         dict={"axe":axe,"idPA":idPA}
-        return render(request,'modificateAXe.html',dict)
+        return render(request,'modificateAxe.html',dict)
     else:
         return redirect('home')
 
@@ -1086,8 +1087,9 @@ def dashboard(request):
         nbCompletedPA=nbCompletedPAM
 
         nbUncompletedPAM=[]
-        for n in nbCompletedPA:
+        for n in nbUncompletedPA:
             nbUncompletedPAM.append([n[0],n[1],n[2],n[3],'-'])
+            
 
         nbUncompletedPA=nbUncompletedPAM
 

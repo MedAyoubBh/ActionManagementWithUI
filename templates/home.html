@@ -8,11 +8,12 @@
         <meta
         name="description"
         content="Quali-tous is a web app to plan , do , check and act for the process actions in industry" />
-        <link rel="shortcut icon" href="../static/images/favicon.ico">
+        <base href="{% static '/' %}">
+        <link rel="shortcut icon" href={% static "images/favicon.ico" %}>
         <!-- Bootstrap CSS -->
        
-        <link href={% static "css/navbar.css" %} rel="stylesheet" >
-        <link href={% static "css/home.css" %} rel="stylesheet" >
+        <link href={% static "css/navbar.css" %} rel="stylesheet" type="text/css">
+        <link href={% static "css/home.css" %} rel="stylesheet" type="text/css">
 
         <title>Quali-Tous</title>
         

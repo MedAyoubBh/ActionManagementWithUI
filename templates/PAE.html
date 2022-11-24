@@ -120,7 +120,7 @@
                     <form action="rev" method="post" id="nbRevform1" name="nbRevform1">
                       {%csrf_token%}
                       <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="checkbox" name="rev1" id="rev1" onclick="setTimeout(function() { document.nbRevform1.submit() }, 0)" {%if request.session.user.Name not in pa.C and request.session.user.Name not in pa.A %} disabled {%endif%} >
+                      <input type="checkbox" name="rev1" id="rev1" onclick="setTimeout(function() { document.nbRevform1.submit() }, 0)" {%if request.session.user.Immatricule not in pa.C and request.session.user.Immatricule not in pa.A %} disabled {%endif%} >
                     </form>
                   </td>
                   <td class="revDone"><input type="checkbox" name="rev2" id="rev2"  disabled></td>
@@ -132,7 +132,7 @@
                     <form action="rev" method="post" id="nbRevform1" name="nbRevform2">
                       {%csrf_token%}
                       <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="checkbox" name="rev2" id="rev2" onclick="setTimeout(function() { document.nbRevform2.submit() }, 0)" {%if request.session.user.Name not in pa.C and request.session.user.Name not in pa.A %} disabled {%endif%} >
+                      <input type="checkbox" name="rev2" id="rev2" onclick="setTimeout(function() { document.nbRevform2.submit() }, 0)" {%if request.session.user.Immatricule not in pa.C and request.session.user.Immatricule not in pa.A %} disabled {%endif%} >
                     </form>
                   </td>
                   <td class="revDone"><input type="checkbox" name="rev3" id="rev3" disabled></td>
@@ -144,7 +144,7 @@
                     <form action="rev" method="post" id="nbRevform3" name="nbRevform3">
                       {%csrf_token%}
                       <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="checkbox" name="rev3" id="rev3" onclick="setTimeout(function() { document.nbRevform3.submit() }, 0)" {%if request.session.user.Name not in pa.C and request.session.user.Name not in pa.A %} disabled {%endif%} >
+                      <input type="checkbox" name="rev3" id="rev3" onclick="setTimeout(function() { document.nbRevform3.submit() }, 0)" {%if request.session.user.Immatricule not in pa.C and request.session.user.Immatricule not in pa.A %} disabled {%endif%} >
                     </form>
                   </td>
                   <td class="revDone"><input type="checkbox" name="rev4" id="rev4" disabled></td>
@@ -156,7 +156,7 @@
                     <form action="rev" method="post" id="nbRevform4" name="nbRevform4">
                       {%csrf_token%}
                       <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
-                      <input type="checkbox" name="rev4" id="rev4" onclick="setTimeout(function() { document.nbRevform4.submit() }, 0)" {%if request.session.user.Name  not in pa.C and request.session.user.Name not in pa.A %} disabled {%endif%} >
+                      <input type="checkbox" name="rev4" id="rev4" onclick="setTimeout(function() { document.nbRevform4.submit() }, 0)" {%if request.session.user.Immatricule  not in pa.C and request.session.user.Immatricule not in pa.A %} disabled {%endif%} >
                     </form>
                   </td>
                   {%elif pa.nbRev == 4 %}
@@ -200,7 +200,7 @@
         </select>
       </form>
 
-      <form action="PrintPA" id="printPAForm" name="respFilterForm" method="post" enctype="multipart/form-data" style="display:flexbox ;margin-left: 87%;">
+      <form action="PrintPA" id="printPAForm" name="printPAForm" method="post" enctype="multipart/form-data" style="display:flexbox ;margin-left: 87%;">
         {%csrf_token%}
         <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
         <input type="submit" value="Imprimer ce PA" style="height: 60px;width: 120px;">
@@ -316,14 +316,14 @@
                             {%csrf_token%}
                             <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                             <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <input type="checkbox" name="C" id="C" value="{{action.C}}" checked onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Name  not in pa.C %} disabled {%endif%}>
+                            <input type="checkbox" name="C" id="C" value="{{action.C}}" checked onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Immatricule  not in pa.C %} disabled {%endif%}>
                           </form>
                         {%else%}
                           <form action="UpdateC" method="post" id="Cform{{action.idAct}}">
                             {%csrf_token%}
                             <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                             <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                            <input type="checkbox" name="C" id="C" value="{{action.C}}" onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Name  not in pa.C %} disabled {%endif%}>
+                            <input type="checkbox" name="C" id="C" value="{{action.C}}" onclick="setTimeout(Cform(this), 0)" {%if request.session.user.Immatricule  not in pa.C %} disabled {%endif%}>
                           </form>
                         {%endif%}
                       </td>
@@ -333,14 +333,14 @@
                         {%csrf_token%}
                         <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                         <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                        <input type="checkbox" name="A" id="A" value="{{action.A}}" checked onclick="setTimeout(Aform(this), 0)" {%if request.session.user.Name not in pa.A %} disabled {%endif%}>
+                        <input type="checkbox" name="A" id="A" value="{{action.A}}" checked onclick="setTimeout(Aform(this), 0)" {%if request.session.user.Immatricule not in pa.A %} disabled {%endif%}>
                       </form>
                     {%else%}
                       <form action="UpdateA" method="post" id="Aform{{action.idAct}}">
                         {%csrf_token%}
                         <input type="number" name="idPA" id="idPA" value="{{pa.idPA}}" hidden>
                         <input type="number" name="idAct" id="idAct" value="{{action.idAct}}" hidden>
-                        <input type="checkbox" name="A" id="A" value="{{action.A}}" onclick="setTimeout(Aform(this), 0)" {%if request.session.user.Name not in pa.A %} disabled {%endif%}>
+                        <input type="checkbox" name="A" id="A" value="{{action.A}}" onclick="setTimeout(Aform(this), 0)" {%if request.session.user.Immatricule not in pa.A %} disabled {%endif%}>
                       </form>
                     {%endif%}
                       </td>
